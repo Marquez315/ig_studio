@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>IG Studio • App para la educación</title><meta name="description" content="App educativa para crear posts y carruseles de robótica, programación, realidad virtual/aumentada e impresión 3D. Creada por Didáctica Aumentada 3.0 y Code Club Ñandutí."><meta name="theme-color" content="#14111c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%A8%3C/svg%3E">
+<link rel="manifest" id="mf">
+<style>
+:root{--bg:#14111c;--card:#201b2e;--tx:#f4f1fa;--mu:#a39bb8;--ac:#ff5fa2;--ac2:#7c5cff;--bd:#352d4a}
+@media(prefers-color-scheme:light){:root:not([data-t=d]){--bg:#f6f3fb;--card:#fff;--tx:#1d1730;--mu:#6b6285;--bd:#ddd5ee}}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+header{display:flex;gap:10px;align-items:center;padding:12px 16px;flex-wrap:wrap}
+h1{font-size:20px;margin:0;flex:1;background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+main{display:grid;grid-template-columns:minmax(300px,420px) 1fr;gap:14px;padding:0 16px 24px;max-width:1300px;margin:auto}
+@media(max-width:820px){main{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:14px}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--mu);margin:0 0 10px}
+button,select,input,textarea{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:8px 10px}
+input,textarea,select{width:100%}textarea{resize:vertical;min-height:90px}
+button{cursor:pointer;width:auto}button.p{background:linear-gradient(90deg,var(--ac),var(--ac2));border:0;color:#fff;font-weight:600}
+button.on{outline:2px solid var(--ac)}button:disabled{opacity:.5}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.row>*{flex:1}
+#drop{border:2px dashed var(--bd);border-radius:14px;padding:26px 10px;text-align:center;color:var(--mu);cursor:pointer}
+#drop.o{border-color:var(--ac);color:var(--ac)}
+.it{display:grid;grid-template-columns:64px 1fr;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--bd)}
+.it img{width:64px;height:64px;object-fit:cover;border-radius:10px}
+.sw{display:flex;gap:4px;margin:4px 0}.sw i{width:20px;height:20px;border-radius:50%;border:1px solid #0004}
+.it small{color:var(--mu);display:block}.it input{margin-top:4px;padding:6px 8px}
+#slides{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px}
+#slides canvas{height:min(62vh,460px);width:auto;border-radius:12px;scroll-snap-align:center;flex:0 0 auto;box-shadow:0 6px 24px #0005}
+#slides canvas{touch-action:none;cursor:grab}#sgrid{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}#sgrid button{flex:none;font-size:22px;padding:6px 10px}#stabs button{font-size:12px;padding:6px 8px}
+#st{color:var(--mu);font-size:13px;min-height:18px}
+.it select{margin-top:4px;padding:6px 8px}.tag{padding:0 16px 8px;color:var(--mu);font-size:13px;max-width:1300px;margin:auto}.tag a,footer a{color:var(--ac)}footer{max-width:1300px;margin:auto;padding:0 16px 28px;color:var(--mu);font-size:13px;text-align:center}ol.g{padding-left:18px;color:var(--mu);font-size:13px;margin:6px 0}ol.g li{margin:3px 0}.chk{display:block;margin-top:8px;font-size:13px;color:var(--mu)}.chk input{width:auto}
+[hidden]{display:none!important}
+#vcv{width:auto;max-width:100%;max-height:62vh;border-radius:12px;background:#000;display:block;margin:0 auto 8px}
+#vbar{height:6px;border-radius:3px;background:var(--bd);overflow:hidden;margin:6px 0}#vbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--ac),var(--ac2))}
+#vvid{width:100%;max-height:62vh;border-radius:12px;background:#000;margin-top:8px}
+#vst,#yst,#vfxl{color:var(--mu);font-size:13px;min-height:18px;margin-top:6px}#yr .it{border-top:0;margin-top:8px;padding-top:0}
+</style></head><body>
+<header><h1>🎨 IG Studio</h1><button id="inst" hidden class="p">Instalar app</button><button id="th">🌓</button></header>
+<p class="tag">📚 App para la educación • creada por <a href="https://www.instagram.com/didactica_aumentada3.0/" target="_blank" rel="noopener">@didactica_aumentada3.0</a> y <a href="https://www.instagram.com/codeclubnanduti/" target="_blank" rel="noopener">@codeclubnanduti</a></p>
+<main>
+<section>
+ <div class="card"><h2>1 · Fotos y videos</h2>
+  <div id="drop">Arrastrá fotos o videos acá<br>o tocá para elegir</div>
+  <input id="fi" type="file" accept="image/*,video/*" multiple hidden>
+  <label class="chk"><input type="checkbox" id="clip"> 🔍 Reconocer qué hay en cada foto (robot, Otto, impresión 3D, RV…) con un modelo que corre en tu dispositivo. Descarga unos 150 MB la primera vez. Las fotos nunca salen de tu equipo. Podés corregir el resultado a mano.</label>
+  <label class="chk"><input type="checkbox" id="vis"> 👁️ Describir cada foto con IA de visión (la más precisa: reconoce streaming, juegos, aula, robots…). Usa Gemini si cargaste tu API key (abajo, en «Formato y estilo»); si no, un servicio gratuito. <b>Envía una copia reducida de la foto</b> al servicio. Si no querés eso, dejala apagada y escribí «qué se ve» a mano.</label>
+  <div id="list"></div></div>
+ <div class="card"><h2>2 · Formato y estilo</h2>
+  <div class="row"><select id="mode"><option value="carousel">Carrusel</option><option value="single">Post único</option><option value="collage">Collage (hasta 4)</option></select>
+  <select id="ratio"><option value="p">4:5 vertical</option><option value="s">1:1 cuadrado</option><option value="h">9:16 historia</option></select></div>
+  <div class="row" id="styles"><button data-s="0" class="on">Cine</button><button data-s="1">Editorial</button><button data-s="2">Pop</button><button data-s="3">Tech</button><button data-s="4">Limpio</button><button data-s="5">Plano</button><button data-s="6">Pizarra</button><button id="rmx">🎲 Remix</button></div>
+  <div class="row"><select id="pal"><option value="">🎨 Paleta: según la foto</option><option value="neon">Neón tech</option><option value="pastel">Pastel</option><option value="retro">Retro</option><option value="oceano">Océano</option><option value="atardecer">Atardecer</option><option value="bosque">Bosque</option><option value="mono">Monocromo</option><option value="contraste">Alto contraste</option></select></div>
+  <div class="row"><select id="topic"><option value="">🧭 Temática: automática (foto / tema)</option></select><select id="dood"><option value="full">✏️ Dibujos: formas y emoji</option><option value="tema">🧩 Dibujos temáticos (íconos del tema)</option><option value="emoji">Solo un emoji</option><option value="none">🚫 Sin dibujos</option></select></div>
+  <input id="theme" placeholder="Tema (ej: robot seguidor de línea con Arduino, Otto, realidad virtual…)">
+  <div class="row"><select id="kind"><option value="proyecto">Proyecto de clase</option><option value="tip">Tip docente</option><option value="reto">Desafío</option><option value="tutorial">Tutorial paso a paso</option></select><select id="tone"><option>motivador</option><option>cercano</option><option>divertido</option><option>inspirador</option><option>técnico simple</option></select></div>
+  <div class="row"><select id="prov"><option value="gemini">✨ IA: Gemini (con tu API key)</option><option value="poll">🆓 IA: Qwen gratis (Pollinations)</option><option value="local">🧰 Sin IA (generador local)</option></select></div>
+  <div class="row"><input id="tok" type="password" autocomplete="off" spellcheck="false"><button id="tt" style="flex:none">🔌 Probar</button></div>
+  <label class="chk"><input type="checkbox" id="rem" style="width:auto"> Recordar el token en este dispositivo (se guarda solo en tu navegador)</label>
+  <small id="tokhelp" style="color:var(--mu);display:block;margin-top:4px"></small>
+  <label class="chk"><input type="checkbox" id="sign"> Firmar las imágenes con los créditos (Didáctica Aumentada 3.0 • Code Club Ñandutí)</label>
+  <div class="row"><button class="p" id="gen">✨ Generar textos y dibujos</button></div><div id="st"></div></div>
+ <div class="card"><h2>3 · Stickers</h2><div class="row" id="stabs"></div><div id="sgrid"></div>
+  <div class="row"><input id="cin" placeholder="Emoji o texto propio (ej: 🤖 o Scratch)"><button id="cadd">Agregar</button></div>
+  <div class="row"><button id="szm">➖</button><button id="szp">➕</button><button id="rot">↻</button><button id="del">🗑 Quitar</button></div>
+  <small style="color:var(--mu)">Tocá un sticker para agregarlo a la slide elegida y arrastralo en la vista previa.</small></div>
+ <div class="card" id="vcard"><h2>5 · 🎬 Video corto</h2>
+  <details id="plug"><summary>🧩 Plugins (activar / desactivar)</summary><div id="plugl"></div></details>
+  <p style="color:var(--mu);font-size:12px;margin:8px 0">Armo videos cortos con tus fotos y clips (sección 1), textos y efectos que se eligen solos según el tema y las palabras de cada escena. Con un link de YouTube, la IA «mira» el video y saca las ideas; <b>no descargo el video de YouTube</b>: los clips los ponés vos.</p>
+  <div id="p-yt"><div class="row"><input id="yu" placeholder="🔗 Link de YouTube (watch, youtu.be o shorts)"><button id="yb" style="flex:none">Leer</button></div>
+   <div id="yst"></div><div id="yr"></div>
+   <details><summary style="font-size:13px;color:var(--mu)">¿Sin API key de Gemini? Pegá la transcripción</summary><textarea id="ytt" placeholder="En YouTube: ⋯ Mostrar transcripción → copiala y pegala acá. Sin Gemini la IA no puede ver el video, solo leer este texto."></textarea></details>
+   <label class="chk"><input type="checkbox" id="vbg"> Usar la miniatura del video de YouTube como fondo de las escenas</label></div>
+  <textarea id="vs" placeholder="Guion: una escena por línea. Podés usar «Título | frase». Si lo dejás vacío uso los textos de tus slides o las ideas del video de YouTube."></textarea>
+  <div class="row"><button id="vai">✨ Escribir guion con IA</button></div>
+  <div class="row"><select id="vr"><option value="v">9:16 vertical (720×1280)</option><option value="l">9:16 liviano (540×960)</option><option value="p">4:5 (720×900)</option><option value="s">1:1 (720×720)</option></select><select id="vd"><option value="2">2 s por escena</option><option value="3" selected>3 s por escena</option><option value="4">4 s por escena</option><option value="5">5 s por escena</option></select></div>
+  <div class="row" id="p-fx"><select id="vfx"><option value="auto">✨ Efectos automáticos (según tema y texto)</option><option value="none">Sin efectos</option><option value="glitch">📺 Glitch</option><option value="matrix">🟩 Lluvia de código</option><option value="confetti">🎉 Confeti</option><option value="neon">🌆 Neón</option><option value="sparks">✨ Chispas</option><option value="bubbles">🫧 Burbujas</option><option value="stars">🌌 Estrellas</option><option value="layers">🖨️ Capas 3D</option><option value="scan">📟 Scanlines</option><option value="rec">🔴 En vivo</option><option value="flash">⚡ Flash</option></select></div>
+  <label class="chk" id="p-mu"><input type="checkbox" id="vmu" checked> 🎵 Música de fondo sintetizada (ritmo según el tema, sin derechos de autor)</label>
+  <div class="row"><button id="vpv">▶ Vista previa</button><button class="p" id="vrec">🎬 Grabar video</button></div>
+  <div id="vst"></div><div id="vfxl"></div></div>
+ <details class="card"><summary><b>4 • Mi Instagram (opcional)</b></summary>
+  <p style="color:var(--mu);font-size:13px">Instagram no deja que una web lea tu perfil sin iniciar sesión, y no hay forma gratuita y simple de conectarla. Lo que sí podés hacer es <b>enseñarle tu estilo</b> con tus propios captions. Así los textos nuevos suenan a tu cuenta (tono, emojis, hashtags).</p>
+  <p style="margin:8px 0 2px;font-size:13px"><b>Opción A • Descargar tu información (recomendada)</b></p>
+  <ol class="g"><li>En Instagram: ☰ → Configuración y actividad → Centro de cuentas → Tu información y permisos → <b>Descargar tu información</b>.</li><li>Elegí «Parte de tu información» → <b>Publicaciones</b>, formato <b>JSON</b>, período «Todo».</li><li>Cuando te llegue el aviso, bajá el ZIP y descomprimilo.</li><li>Cargá acá el archivo <b>posts_1.json</b> (suele estar en <i>your_instagram_activity/media</i> o <i>content</i>; podés elegir varios).</li></ol>
+  <p style="margin:8px 0 2px;font-size:13px"><b>Opción B • Pegar captions</b></p>
+  <p style="color:var(--mu);font-size:13px;margin:2px 0">Copiá 5 a 10 captions y pegalos abajo, separados por una línea con <code>---</code>.</p>
+  <div class="row"><input id="ig" placeholder="@tuusuario"><button id="igo">Abrir mi perfil</button></div>
+  <textarea id="old" placeholder="Pegá captions anteriores…"></textarea>
+  <div class="row"><input type="file" id="igj" accept=".json,application/json" multiple><button id="ana">Analizar estilo</button><button id="clr">Borrar estilo</button></div><div id="prof" style="font-size:13px;color:var(--mu)"></div>
+  <p style="color:var(--mu);font-size:12px">🔒 El análisis se hace en tu navegador y se guarda solo en este dispositivo. Si usás la IA gratuita, se envía únicamente un resumen del estilo y 3 ejemplos cortos de captions (sin hashtags), nunca tus fotos ni el archivo completo.</p></details>
+</section>
+<section>
+ <div class="card"><h2>Vista previa</h2><div id="slides"></div>
+  <div class="row" style="align-items:center"><button id="pv">◀</button><span id="cur" style="text-align:center;color:var(--mu)">Slide 1</span><button id="nx">▶</button></div>
+  <div class="row"><button class="p" id="dl">⬇ Descargar PNG</button><button id="sh">📤 Compartir</button></div></div>
+ <div class="card"><h2>Descripción para publicar</h2><textarea id="cap" placeholder="Acá aparece el caption y los hashtags…"></textarea>
+  <div class="row"><button id="cp">Copiar texto</button><a href="https://www.instagram.com/" target="_blank" rel="noopener" style="flex:1"><button style="width:100%">Ir a Instagram</button></a></div></div>
+ <div class="card" id="vout"><h2>Video corto</h2><canvas id="vcv" width="720" height="1280"></canvas><div id="vbar"><i></i></div>
+  <video id="vvid" controls playsinline hidden></video>
+  <div class="row"><a id="vdl" hidden style="flex:1"><button class="p" style="width:100%">⬇ Descargar video</button></a><button id="vsh" hidden>📤 Compartir</button></div></div>
+</section></main>
+<footer>🎓 IG Studio es una app para la educación. Creadores: <a href="https://www.instagram.com/didactica_aumentada3.0/" target="_blank" rel="noopener">Didáctica Aumentada 3.0</a> y <a href="https://www.instagram.com/codeclubnanduti/" target="_blank" rel="noopener">Code Club Ñandutí</a>.</footer>
+<script>
+const $=s=>document.querySelector(s),SZ={p:[1080,1350],s:[1080,1080],h:[1080,1920]};
+const S={items:[],style:0,seed:7,prof:null};try{S.prof=JSON.parse(localStorage.igprof||'null')}catch(e){}
+const st=t=>$('#st').textContent=t;
+// ---- PWA
+const mf={name:'IG Studio • App para la educación',short_name:'IG Studio',description:'App educativa de Didáctica Aumentada 3.0 y Code Club Ñandutí',start_url:'.',display:'standalone',background_color:'#14111c',theme_color:'#14111c',icons:[{src:"data:image/svg+xml,"+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='#7c5cff'/><text x='50' y='70' font-size='60' text-anchor='middle'>🎨</text></svg>"),sizes:'any',type:'image/svg+xml',purpose:'any'}]};
+$('#mf').href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(mf));
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+let dp;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('#inst').hidden=false});
+$('#inst').onclick=()=>dp&&dp.prompt();
+$('#th').onclick=()=>{const r=document.documentElement;r.dataset.t=r.dataset.t=='d'?'l':'d'};
+// ---- análisis de color
+function hsl(r,g,b){r/=255;g/=255;b/=255;const M=Math.max(r,g,b),m=Math.min(r,g,b),l=(M+m)/2,d=M-m;let h=0,s=0;if(d){s=d/(1-Math.abs(2*l-1));h=M==r?((g-b)/d)%6:M==g?(b-r)/d+2:(r-g)/d+4;h=(h*60+360)%360}return[h,s,l]}
+function cname(c){if(!c)return'';const[h,s,l]=hsl(...c);if(l<.14)return'negro';if(l>.92)return'blanco';if(s<.13)return l<.5?'gris oscuro':'gris claro';return[[15,'rojo'],[40,'naranja'],[65,'amarillo'],[165,'verde'],[200,'turquesa'],[255,'azul'],[290,'violeta'],[340,'rosa'],[361,'rojo']].find(x=>h<x[0])[1]}
+function analyze(el,w,h){const c=document.createElement('canvas');c.width=c.height=40;const x=c.getContext('2d');x.drawImage(el,0,0,40,40);const d=x.getImageData(0,0,40,40).data,m={};let R=0,G=0,B=0,n=d.length/4,sa=0;
+for(let i=0;i<d.length;i+=4){R+=d[i];G+=d[i+1];B+=d[i+2];sa+=hsl(d[i],d[i+1],d[i+2])[1];const k=(d[i]>>5)+','+(d[i+1]>>5)+','+(d[i+2]>>5),v=m[k]=m[k]||[0,0,0,0];v[0]+=d[i];v[1]+=d[i+1];v[2]+=d[i+2];v[3]++}
+const arr=Object.values(m).sort((a,b)=>b[3]-a[3]).map(v=>[v[0]/v[3]|0,v[1]/v[3]|0,v[2]/v[3]|0]),p=[];
+for(const c of arr){if(p.every(o=>Math.hypot(o[0]-c[0],o[1]-c[1],o[2]-c[2])>70))p.push(c);if(p.length==5)break}
+while(p.length<3)p.push(p[0]);
+const L=(R+G+B)/n/765,wm=(R-B)/n/255,s=sa/n;
+const light=L>.62?'luminoso':L<.35?'sombrío':'equilibrado',temp=wm>.08?'cálido':wm<-.08?'frío':'neutro',sat=s>.45?'vibrante':s<.2?'suave':'natural',or=w>h*1.1?'horizontal':h>w*1.1?'vertical':'cuadrada';
+return{p,light,temp,sat,desc:`Imagen ${or} de ambiente ${light}, ${temp} y ${sat}; domina el ${cname(p[0])} con acentos de ${cname(p[1])} y ${cname(p[2])}.`}}
+// ---- carga
+function load(f){return new Promise(res=>{const u=URL.createObjectURL(f);if(f.type.startsWith('video')){const v=document.createElement('video');v.muted=true;v.playsInline=true;v.src=u;v.onloadeddata=()=>{v.currentTime=Math.min(1,v.duration/2||0)};v.onseeked=()=>{const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);res({el:c,w:c.width,h:c.height,url:c.toDataURL('image/jpeg',.5),vid:1,vsrc:u})};v.onerror=()=>res(null)}
+else{const i=new Image();i.onload=()=>res({el:i,w:i.naturalWidth,h:i.naturalHeight,url:u});i.onerror=()=>res(null);i.src=u}})}
+async function add(files){st('Analizando…');const nuevos=[];try{for(const f of files){const o=await load(f);if(!o)continue;Object.assign(o,analyze(o.el,o.w,o.h),{title:'',phrase:'',emoji:['✨','🌿','☀️','🌙','💫','🎞️'][S.items.length%6]});S.items.push(o);nuevos.push(o)}
+if($('#clip').checked)for(const o of nuevos){st('Reconociendo foto '+(S.items.indexOf(o)+1)+'…');await recog(o)}
+if($('#vis').checked)for(const o of nuevos){st('Describiendo foto '+(S.items.indexOf(o)+1)+' con IA de visión…');await vis(o)}
+fill(local());list();render();st(files.length+' archivo(s) analizados. Textos base listos; tocá ✨ para mejorarlos con IA.')}catch(e){st('Error: '+e.message)}}
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+function list(){const opts='<option value="">¿Qué se ve? (automático)</option>'+Object.entries(TOP).map(([k,v])=>`<option value="${k}">${v.n}</option>`).join('');
+$('#list').innerHTML=S.items.map((o,i)=>`<div class="it"><img src="${o.url}"><div><div class="sw">${o.p.map(c=>`<i style="background:rgb(${c})"></i>`).join('')}<button data-d="${i}" style="margin-left:auto;padding:0 8px">✕</button></div><small>${esc(describe(o))}${o.auto?' <b>(reconocido '+o.auto+'%)</b>':o.vd?' <b>(IA de visión)</b>':''}</small><select data-tp="${i}">${opts.replace(`value="${o.tp||''}"`,`value="${o.tp||''}" selected`)}</select><input data-i="${i}" data-k="note" value="${esc(o.note)}" placeholder="Qué se ve (opcional): ej. Otto bailando"><input data-i="${i}" data-k="title" value="${esc(o.title)}" placeholder="Título"><input data-i="${i}" data-k="phrase" value="${esc(o.phrase)}" placeholder="Frase"></div></div>`).join('')}
+$('#list').onchange=e=>{const t=e.target;if(t.dataset.tp==null)return;const i=+t.dataset.tp,o=S.items[i];o.tp=t.value;o.man=1;o.auto=0;const r=local().slides[i];Object.assign(o,{title:r.title,phrase:r.phrase,emoji:r.emoji});list();render()};
+$('#list').oninput=e=>{const t=e.target;if(t.dataset.i){S.items[t.dataset.i][t.dataset.k]=t.value;render()}};
+$('#list').addEventListener('change',e=>{if(e.target.dataset.k=='note'){const o=S.items[e.target.dataset.i];o.note=e.target.value;list()}});
+$('#list').onclick=e=>{const d=e.target.dataset.d;if(d!=null){S.items.splice(d,1);list();render()}};
+const dz=$('#drop');dz.onclick=()=>$('#fi').click();$('#fi').onchange=e=>add(e.target.files);
+dz.ondragover=e=>{e.preventDefault();dz.classList.add('o')};dz.ondragleave=()=>dz.classList.remove('o');dz.ondrop=e=>{e.preventDefault();dz.classList.remove('o');add(e.dataTransfer.files)};
+// ---- textos y temáticas
+const EDU='App para la educación creada por "Didáctica Aumentada 3.0" y "Code Club Ñandutí": robótica educativa, programación, realidad virtual y aumentada, impresión 3D y pensamiento computacional en el aula. Público: docentes y estudiantes. Texto claro, motivador y pedagógico, con una invitación a la acción (por ej. probarlo en clase).';
+const HT=['#RoboticaEducativa','#Programacion','#EducacionTecnologica','#PensamientoComputacional','#STEAM'];
+const TOP={
+otto:{n:'Otto DIY',de:'un robot Otto DIY (robot caminante de código abierto)',em:'🦿',ic:['🦿','🤖','🔩'],tg:['#OttoDIY','#Arduino','#Impresion3D'],rx:/\botto\b/i,cl:'a small Otto DIY biped robot with servo legs',
+ ti:['Conocé a Otto','Lo armamos','Lo conectamos','Programamos','A bailar','Compartimos'],ph:['Otto es un robot caminante de código abierto.','Piezas impresas en 3D y servos pequeños.','Arduino, ultrasonido y mucha paciencia.','Con bloques le enseñamos a caminar y bailar.','Un robot, mil movimientos posibles.'],cp:'Otto enseña mecánica, electrónica y programación en un solo proyecto.'},
+sigue:{n:'Robot sigue línea',de:'un robot seguidor de línea',em:'🛣️',ic:['🛣️','🤖','📡'],tg:['#RobotSigueLinea','#Arduino','#RoboticaEducativa'],rx:/l[ií]nea|sigue.?l/i,cl:'a small line-following robot on a black line track',
+ ti:['La pista','Los sensores','El algoritmo','Primera vuelta','Calibramos','A competir'],ph:['Una línea negra y un gran desafío.','Los sensores infrarrojos leen el camino.','Si ve negro avanza; si no, corrige.','¿Se sale en las curvas? Ajustamos la velocidad.','Probar, calibrar y volver a intentar.'],cp:'Un robot que sigue una línea enseña sensores, lógica condicional y cómo corregir errores.'},
+futbol:{n:'Robot futbolista',de:'robots jugando al fútbol',em:'⚽',ic:['⚽','🤖','🥅'],tg:['#RobotFutbol','#RoboticaEducativa','#STEAM'],rx:/f[uú]tbol|soccer|robocup/i,cl:'small robots playing soccer on a miniature field',
+ ti:['La cancha','Los jugadores','La estrategia','El partido','Mejoramos','Gol'],ph:['Robots en la cancha: ¡empieza el partido!','Cada equipo diseña y programa su jugador.','Control remoto o autónomo: ¿qué estrategia elegís?','Probamos pases, remates y defensa.','Entrenar el código es entrenar al equipo.'],cp:'El fútbol de robots une diseño, programación, estrategia y trabajo en equipo.'},
+microbit:{n:'micro:bit',de:'una placa micro:bit',em:'🧮',ic:['🧮','💡','🎮'],tg:['#microbit','#Programacion','#STEAM'],rx:/micro:?\s?bit/i,cl:'a BBC micro:bit board',
+ ti:['La placa','Sensores','Programamos','Probamos','Creamos','Compartimos'],ph:['Una placa chiquita con LEDs y sensores.','Botones, acelerómetro y brújula integrados.','Programamos con bloques o Python.','Inventamos juegos y medidores.','Ideal para empezar a crear tecnología.'],cp:'La micro:bit permite crear proyectos reales desde los primeros pasos en programación.'},
+scratch:{n:'Programación en bloques',de:'una actividad de programación en bloques',em:'🧩',ic:['🧩','🐱','💻'],tg:['#Scratch','#Programacion','#PensamientoComputacional'],rx:/scratch|bloques|mblock/i,cl:'a computer screen with block-based visual programming',
+ ti:['El reto','Bloques','La lógica','Probamos','Mejoramos','Compartimos'],ph:['Programar es contar una historia paso a paso.','Arrastramos bloques y aparece la magia.','Condiciones, bucles y variables.','Ejecutamos y vemos qué pasa.','Cada versión sale mejor que la anterior.'],cp:'Programar con bloques desarrolla el pensamiento computacional desde edades tempranas.'},
+rv:{n:'Realidad virtual',de:'una experiencia de realidad virtual',em:'🥽',ic:['🥽','🌐','🪐'],tg:['#RealidadVirtual','#EdTech','#EducacionTecnologica'],rx:/realidad virtual|\brv\b|\bvr\b|visor/i,cl:'a person wearing a virtual reality headset',
+ ti:['Otro mundo','Visores puestos','Explorando','Creamos','Aprendemos','Compartimos'],ph:['Con unos visores viajamos a otro lugar.','Aprender dentro de la experiencia.','Recorremos espacios que no entran en el aula.','También podemos crear nuestros propios mundos.','La tecnología al servicio de la imaginación.'],cp:'La realidad virtual permite explorar lugares y conceptos imposibles de visitar en el aula.'},
+ra:{n:'Realidad aumentada',de:'una actividad de realidad aumentada',em:'📱',ic:['📱','🔮','🧊'],tg:['#RealidadAumentada','#EdTech','#EducacionTecnologica'],rx:/realidad aumentada|\bra\b|\bar\b/i,cl:'a phone showing augmented reality over a real object',
+ ti:['Mirá esto','Apuntamos','Aparece','Interactuamos','Creamos','Compartimos'],ph:['Con el celular, lo digital aparece en el aula.','Apuntá a la imagen y mirá qué pasa.','Modelos 3D sobre tu mesa.','Aprender se vuelve visible.','¿Y si creamos nuestra propia experiencia?'],cp:'La realidad aumentada suma capas digitales al mundo real y vuelve visible lo que se aprende.'},
+imp3d:{n:'Impresión 3D',de:'una pieza de impresión 3D',em:'🖨️',ic:['🖨️','🧊','📐'],tg:['#Impresion3D','#Maker','#STEAM'],rx:/\b3d\b|impresi[oó]n|impresora/i,cl:'a 3D printer printing a plastic object',
+ ti:['Diseñamos','Modelamos','Laminamos','Imprimimos','El resultado','Lo usamos'],ph:['Una idea que empieza en la pantalla.','Modelamos la pieza en 3D.','Capa sobre capa, nace el objeto.','Paciencia: imprimir lleva su tiempo.','Del diseño al objeto real en el aula.'],cp:'La impresión 3D lleva el diseño digital a objetos reales y enseña a resolver problemas.'},
+arduino:{n:'Arduino y electrónica',de:'un circuito con Arduino',em:'💡',ic:['🔌','💡','🔋'],tg:['#Arduino','#Electronica','#Programacion'],rx:/arduino|circuito|electr[oó]nic|sensor/i,cl:'an Arduino board with breadboard and wires',
+ ti:['El circuito','Conectamos','El código','Probamos','Depuramos','Funciona'],ph:['Una placa pequeña con grandes posibilidades.','Cables, sensores y mucha curiosidad.','Unas líneas de código y se enciende.','Si no funciona, revisamos las conexiones.','Electrónica que se aprende haciendo.'],cp:'Con Arduino se aprende electrónica y programación creando proyectos que funcionan.'},
+robotica:{n:'Robótica educativa',de:'un proyecto de robótica educativa',em:'🤖',ic:['🤖','⚙️','🔧'],tg:['#RoboticaEducativa','#Robotica','#STEAM'],rx:/robot/i,cl:'a small educational robot built with kit parts',
+ ti:['El desafío','Armamos','Programamos','Probamos','Mejoramos','Compartimos'],ph:['Un problema real para resolver con robots.','Piezas, motores y sensores en nuestras manos.','Con código le damos vida al robot.','Probamos, fallamos y ajustamos.','Cada error nos acerca a la solución.'],cp:'Aprender haciendo con robótica desarrolla creatividad, trabajo en equipo y pensamiento lógico.'},
+mate:{n:'Matemática y juegos de lógica',de:'un juego matemático de tablero',em:'🔢',ic:['🔢','➕','🧩'],tg:['#Matematica','#JuegosDidacticos','#STEAM'],rx:/matem|n[uú]meros|c[aá]lculo|suma|resta|ecuaci/i,cl:'a math board game with numbers and colored squares made of paper',
+ ti:['El juego','Las reglas','Jugamos','Pensamos','Descubrimos','Compartimos'],ph:['Un tablero, números y mucha lógica.','Cada casilla es un pequeño desafío.','Sumar, restar y descubrir patrones jugando.','Equivocarse también enseña.','Aprender matemática se disfruta más jugando.'],cp:'Los juegos matemáticos hacen que razonar, calcular y descubrir patrones sea una experiencia divertida.'},
+juego:{n:'Juegos didácticos',de:'un juego didáctico de mesa',em:'🎲',ic:['🎲','🧩','🏆'],tg:['#JuegosDidacticos','#AprenderJugando','#STEAM'],rx:/juego|tablero|jugar|l[uú]dic/i,cl:'a handmade educational board game on a table',
+ ti:['El juego','Las reglas','A jugar','Estrategias','Ganamos','Compartimos'],ph:['Un juego hecho para aprender.','Reglas simples y mucha estrategia.','Jugamos en equipo y pensamos juntos.','Cada partida nos enseña algo nuevo.','Jugar también es una forma de aprender.'],cp:'Los juegos didácticos convierten el aula en un espacio para pensar, colaborar y divertirse.'},
+desench:{n:'Programación desenchufada',de:'una actividad de programación sin computadora',em:'🧭',ic:['🧭','➡️','🧩'],tg:['#ProgramacionDesenchufada','#PensamientoComputacional','#STEAM'],rx:/desenchuf|unplugged|sin compu|sin pantalla/i,cl:'a classroom activity with cards and a floor grid, no computers',
+ ti:['Sin pantallas','Las instrucciones','El algoritmo','Probamos','Depuramos','Compartimos'],ph:['Programar sin computadora, con el cuerpo y el papel.','Flechas y tarjetas son nuestras instrucciones.','Un algoritmo es una receta paso a paso.','Si falla, buscamos el error juntos.','Pensamiento computacional al alcance de todos.'],cp:'La programación desenchufada enseña algoritmos y lógica sin necesidad de dispositivos.'},
+ciencia:{n:'Ciencias y experimentos',de:'un experimento de ciencias',em:'🔬',ic:['🔬','🧪','⚗️'],tg:['#Ciencias','#Experimentos','#STEAM'],rx:/ciencia|experiment|laborator|qu[ií]mica|f[ií]sica/i,cl:'a science experiment in a classroom',
+ ti:['La pregunta','Hipótesis','Experimentamos','Observamos','Conclusiones','Compartimos'],ph:['Todo empieza con una pregunta.','¿Qué creemos que va a pasar?','Probamos y registramos lo que vemos.','Observar con atención nos da pistas.','Cada resultado nos deja una enseñanza.'],cp:'Experimentar permite hacer preguntas, probar ideas y aprender de los resultados.'},
+maker:{n:'Maker y reciclado',de:'un proyecto maker con materiales reciclados',em:'✂️',ic:['✂️','♻️','🛠️'],tg:['#Maker','#Reciclado','#STEAM'],rx:/maker|reciclad|cart[oó]n|manualidad/i,cl:'a handmade craft project made of cardboard and paper',
+ ti:['La idea','Materiales','Construimos','Probamos','Mejoramos','Compartimos'],ph:['Una idea y materiales de todos los días.','Cartón, papel y mucha creatividad.','Construir con las manos también es pensar.','Probamos y rediseñamos.','Del reciclado al proyecto de clase.'],cp:'Crear con materiales cotidianos desarrolla la creatividad y la resolución de problemas.'},
+stream:{n:'Streaming y transmisión en vivo',de:'estudiantes haciendo una transmisión en vivo (streaming)',em:'📡',ic:['📡','🎥','🎙️'],tg:['#Streaming','#EnVivo','#EducacionDigital'],rx:/stream|transmisi[oó]n|transmit|en vivo|\blive\b|\bobs\b|twitch|youtube|podcast|radio|micr[oó]fono|c[aá]mara/i,cl:'students broadcasting a live stream with a laptop, camera and microphone',
+ ti:['En vivo','Al aire','Cámara y micrófono','Detrás de cámara','Todo el equipo','Compartimos'],ph:['¡Estamos al aire! Una transmisión hecha por estudiantes.','Cámara, micrófono y compu: el estudio está listo.','Cada uno con su rol: cámara, sonido y conducción.','Probamos la señal antes de salir en vivo.','Comunicar también es aprender.'],cp:'Hacer streaming en el aula une tecnología, comunicación y trabajo en equipo.'},
+general:{n:'Actividad en clase',de:'una actividad de clase',em:'✨',ic:['✨','📚','💡'],tg:['#Educacion','#AprenderHaciendo','#STEAM'],rx:/(?!)/,cl:'a classroom activity',
+ ti:['En clase','Manos a la obra','Pensamos','Probamos','Aprendemos','Compartimos'],ph:['Una actividad para aprender haciendo.','Cada grupo aporta su mirada.','Pensamos, probamos y ajustamos.','Aprender se nota en lo que creamos.','Compartir lo aprendido nos hace crecer.'],cp:'Aprender haciendo vuelve las clases más significativas, creativas y colaborativas.'},
+aula:{n:'Tecnología en el aula',de:'estudiantes trabajando en el aula',em:'🎓',ic:['🎓','📚','💡'],tg:['#EducacionTecnologica','#PensamientoComputacional','#STEAM'],rx:/aula|clase|escuela|alumn|estudiante/i,cl:'students working together in a classroom',
+ ti:['En el aula','En equipo','Pensamos','Hacemos','Reflexionamos','Compartimos'],ph:['Aprender con tecnología, juntos.','Cada grupo aporta una idea distinta.','Pensar el problema antes de resolverlo.','Hacer con las manos y con la cabeza.','Compartir lo aprendido nos hace crecer.'],cp:'La tecnología en el aula es una oportunidad para crear, colaborar y pensar distinto.'}};
+const OTH=['people posing for a group photo','a landscape','food on a table','a pet animal'];
+const guess=t=>{t=t||'';for(const k in TOP)if(TOP[k].rx.test(t))return k;return''};
+const tpx=o=>o.tp||guess(o.note)||$('#topic').value||guess($('#theme').value)||'';
+function mainTp(){const c={};S.items.forEach(o=>{const t=tpx(o);if(t)c[t]=(c[t]||0)+1});return $('#topic').value||Object.keys(c).sort((a,b)=>c[b]-c[a])[0]||guess($('#theme').value)||'general'}
+function describe(o){const t=tpx(o);return(t?`${o.vid?'Video':'Foto'} de ${TOP[t].de}. `:'')+(o.note?`Qué se ve: ${o.note}. `:'')+o.desc}
+let clipP=null;
+function loadClip(){return clipP=clipP||import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2').then(m=>{m.env.allowLocalModels=false;return m.pipeline('zero-shot-image-classification','Xenova/clip-vit-base-patch32')}).catch(e=>{clipP=null;throw e})}
+async function recog(o){if(o.man)return;try{st('Cargando modelo de reconocimiento (la primera vez tarda)…');const c=await loadClip(),keys=Object.keys(TOP),labs=[...keys.map(q=>TOP[q].cl),...OTH],sc={};
+const views=[0,1].map(m=>{const cv=document.createElement('canvas');cv.width=cv.height=224;const x=cv.getContext('2d');x.fillStyle='#000';x.fillRect(0,0,224,224);const k=m?Math.min(224/o.w,224/o.h):Math.max(224/o.w,224/o.h);x.drawImage(o.el,(224-o.w*k)/2,(224-o.h*k)/2,o.w*k,o.h*k);return cv.toDataURL('image/jpeg',.9)});
+for(const v of views){const r=await c(v,labs);r.forEach(t=>sc[t.label]=(sc[t.label]||0)+t.score/views.length)}
+const top=Object.entries(sc).sort((a,b)=>b[1]-a[1])[0],i=keys.findIndex(q=>TOP[q].cl==top[0]);
+if(i>=0&&top[1]>.22){o.tp=keys[i];o.auto=Math.round(top[1]*100)}else{o.tp='';o.auto=0}}catch(e){st('No pude usar el reconocimiento local (¿sin conexión?). Probá «Describir con IA de visión» o elegí a mano qué se ve.');$('#clip').checked=false}}
+
+// ---- proveedores de IA (Gemini con token / Pollinations)
+const PN={gemini:'Gemini',poll:'Qwen (gratis)'},PK={gemini:'igs_gemini',poll:'igs_poll'},TK={gemini:'',poll:''};
+let GM=['gemini-3.1-flash-lite','gemini-3.5-flash','gemini-3-flash-preview','gemini-2.5-flash'];
+const LSG=k=>{try{return localStorage.getItem(k)||''}catch(e){return''}},LSS=(k,v)=>{try{v?localStorage.setItem(k,v):localStorage.removeItem(k)}catch(e){}};
+async function gem(parts,o){const c=new AbortController(),to=setTimeout(()=>c.abort(),o.to||45000);
+try{const body={contents:[{role:'user',parts}],generationConfig:{temperature:.8,...(o.json===0?{}:{responseMimeType:'application/json'})}};if(o.sys)body.systemInstruction={parts:[{text:o.sys}]};
+const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+o.model+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':o.key},signal:c.signal,body:JSON.stringify(body)});
+const j=await r.json().catch(()=>({}));if(!r.ok){const e=new Error((j.error&&j.error.message)||('HTTP '+r.status));e.code=r.status;throw e}
+const t=((((j.candidates||[])[0]||{}).content||{}).parts||[]).map(x=>x.text||'').join('').trim();if(!t)throw new Error('respuesta vacía');return t}
+catch(e){if(e.name=='AbortError')e.message='tardó demasiado';throw e}finally{clearTimeout(to)}}
+async function gemTry(parts,o){let last;for(const m of GM){try{const text=await gem(parts,{...o,model:m});GM=[m,...GM.filter(x=>x!=m)];return{text,m}}catch(e){last=e;if(e.code==401||e.code==403||(e.code==400&&/api key/i.test(e.message)))throw new Error('la API key no es válida o no tiene permiso');}}throw last}
+async function pollTxt(msgs,models){const H={'Content-Type':'application/json'};if(TK.poll)H.Authorization='Bearer '+TK.poll;let last=new Error('sin respuesta'),auth=0;
+for(const u of ['https://gen.pollinations.ai/v1/chat/completions','https://text.pollinations.ai/openai']){let skip=0;
+for(const m of models){if(skip)break;const c=new AbortController(),to=setTimeout(()=>c.abort(),25000);
+try{const r=await fetch(u,{method:'POST',headers:H,signal:c.signal,body:JSON.stringify({model:m,seed:Math.random()*1e6|0,messages:msgs})});
+if(r.status==401||r.status==402||r.status==403){auth=1;skip=1;last=new Error('HTTP '+r.status);continue}
+const j=await r.json(),t=(j.choices[0].message.content||'').trim();if(!t)throw new Error('respuesta vacía');return{text:t,m}}
+catch(e){last=e}finally{clearTimeout(to)}}}
+throw new Error(auth?'ahora pide token: creá uno gratis en enter.pollinations.ai y pegalo en el campo 🔑':(last.name=='AbortError'?'tardó demasiado':last.message||'no respondió'))}
+function small(o,max,q){const cv=document.createElement('canvas'),k=Math.min(1,max/Math.max(o.w,o.h));cv.width=Math.round(o.w*k);cv.height=Math.round(o.h*k);cv.getContext('2d').drawImage(o.el,0,0,cv.width,cv.height);return cv.toDataURL('image/jpeg',q)}
+const VISP='Mirá esta foto de una actividad escolar y respondé SOLO un JSON con este formato: {"tema":"<una de estas claves: '+Object.keys(TOP).join(', ')+'>","que_se_ve":"una oración en español de máximo 25 palabras que diga qué personas, objetos y materiales aparecen y qué parecen estar haciendo"}. Pistas: chicos con cámara, micrófono o compu transmitiendo = «stream»; robots, placas o circuitos = su tema técnico; gente trabajando en una mesa sin un tema claro = «aula»; si nada encaja = «general». Si no estás seguro, usá «parece». No inventes.';
+async function vis(o){if(o.note)return;try{let j;
+if($('#prov').value=='gemini'&&TK.gemini){const g=await gemTry([{text:VISP},{inlineData:{mimeType:'image/jpeg',data:small(o,768,.8).split(',')[1]}}],{key:TK.gemini});j=JSON.parse(g.text.match(/\{[\s\S]*\}/)[0])}
+else{const g=await pollTxt([{role:'user',content:[{type:'text',text:VISP},{type:'image_url',image_url:{url:small(o,512,.7)}}]}],['openai']);try{j=JSON.parse(g.text.match(/\{[\s\S]*\}/)[0])}catch(e){j={que_se_ve:g.text}}}
+const t=String(j.que_se_ve||'').replace(/\s+/g,' ').trim().slice(0,220);if(t.length>8){o.note=t;o.vd=1}
+if(!o.man&&j.tema&&j.tema!='general'&&TOP[j.tema]){o.tp=j.tema;o.auto=0}}
+catch(e){st('No pude usar la IA de visión ('+(e.message||e)+'). Escribí «qué se ve» a mano en cada foto.');$('#vis').checked=false}}
+function local(){const mt=mainTp(),T0=TOP[mt],th=$('#theme').value||T0.n.toLowerCase(),k=$('#kind').value,n=S.items.length,O={proyecto:'Mirá lo que lograron en clase',tip:'Tip para tu clase',reto:'Desafío de programación',tutorial:'Paso a paso'};
+return{slides:S.items.map((o,i)=>{const t=TOP[tpx(o)||mt];return{title:t.ti[i%6],phrase:i==0?`${O[k]}: ${th}.`:i==n-1?'¿Lo probás en tu aula? Contanos cómo te va.':t.ph[(i-1)%5],emoji:t.em}}),caption:`${O[k]}: ${th}. ${T0.cp} ¿Te animás a probarlo en tu clase? ${T0.em}💡`,hashtags:T0.tg}}
+function fill(r){r.slides.forEach((s,i)=>{if(S.items[i])Object.assign(S.items[i],{title:s.title||'',phrase:s.phrase||'',emoji:s.emoji||'✨'})});const seen={},h=[...TOP[mainTp()].tg.slice(0,2),...(r.hashtags||[]),...(S.prof&&S.prof.tags||[]).slice(0,2),...HT].map(t=>'#'+String(t).replace(/[^\p{L}\d_]/gu,'')).filter(t=>t.length>1&&!seen[t.toLowerCase()]&&(seen[t.toLowerCase()]=1)).slice(0,6);$('#cap').value=r.caption+'\n\n'+h.join(' ')}
+async function ai(p){const mt=mainTp(),ds=S.items.map((o,i)=>`Foto ${i+1}: ${describe(o)}`).join('\n'),pf=S.prof?`Estilo previo de la cuenta: ${S.prof.sum}. ${(S.prof.ex&&S.prof.ex.length)?'Ejemplos de cómo escribe (imitá el tono, no los copies): '+S.prof.ex.map(e=>'«'+e+'»').join(' '):''}`:'';
+const ins=`Tema: ${$('#theme').value||TOP[mt].n}. Temática principal: ${TOP[mt].n}. Tipo: ${$('#kind').selectedOptions[0].text}. Tono: ${$('#tone').value}. ${pf}\nDescripción de cada foto:\n${ds}\nUsá esas descripciones para decir qué se ve y qué se aprende en cada foto; si una foto dice «Qué se ve», eso es lo que realmente aparece: basate en eso y no lo reemplaces por la temática general. No inventes tecnología, personas, marcas ni datos que no estén descriptos. Creá un hilo narrativo: cada frase continúa la anterior y se conecta con los colores/ambiente de su foto. Formato: {"caption":"2-3 oraciones con invitación a la acción","hashtags":["#a","#b","#c","#d","#e"] (exactamente 5, sobre educación, robótica y programación),"slides":[{"title":"máx 3 palabras, concreto","phrase":"máx 12 palabras","emoji":"un emoji"}]} con exactamente ${S.items.length} slides.`,sys='Sos redactor de Instagram educativo en español rioplatense. '+EDU+' Respondé SOLO un JSON válido, sin texto extra.';
+const parse=t=>{const o=JSON.parse(t.match(/\{[\s\S]*\}/)[0]);if(!Array.isArray(o.slides))throw new Error('respuesta no válida');return o};
+if(p=='gemini'){const g=await gemTry([{text:ins}],{key:TK.gemini,sys});const o=parse(g.text);o.m=g.m;return o}
+const g=await pollTxt([{role:'system',content:sys},{role:'user',content:ins}],['qwen-coder','mistral','openai']);const o=parse(g.text);o.m=g.m;return o}
+$('#gen').onclick=async()=>{if(!S.items.length)return st('Primero subí fotos o videos.');const b=$('#gen');b.disabled=true;st('Generando…');let r,ok=0;const pv=$('#prov').value,er=[];
+if(pv!='local'&&navigator.onLine){for(const p of pv=='gemini'?['gemini','poll']:['poll']){if(p=='gemini'&&!TK.gemini){er.push('Gemini: falta la API key');continue}try{st('Probando '+PN[p]+'…');r=await ai(p);ok=1;break}catch(e){er.push(PN[p]+': '+(e.message||e))}}}
+try{if(!r)r=local();fill(r);list();render();st((ok?'Textos creados con IA ('+r.m+') ✔':'Usé el generador local (sin IA).')+(er.length?' ⚠ '+er.join(' · '):''))}catch(e){st('Error: '+e.message)}b.disabled=false};
+// ---- dibujo
+const rng=a=>()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+const PAL={neon:[[0,255,200],[255,0,170],[124,92,255],[255,230,0],[20,16,40]],pastel:[[255,214,224],[200,230,255],[220,255,214],[255,243,196],[230,214,255]],retro:[[231,111,81],[244,162,97],[233,196,106],[42,157,143],[38,70,83]],oceano:[[3,4,94],[0,119,182],[0,180,216],[144,224,239],[202,240,248]],atardecer:[[255,94,98],[255,153,102],[255,195,113],[154,78,180],[58,28,113]],mono:[[20,20,20],[90,90,90],[150,150,150],[210,210,210],[245,245,245]],bosque:[[27,67,50],[45,106,79],[82,183,136],[149,213,178],[216,243,220]],contraste:[[255,221,0],[0,0,0],[255,255,255],[255,0,80],[0,90,255]]},pl=o=>PAL[S.pal]||o.p;
+const rgb=c=>`rgb(${c})`,lum=c=>(.299*c[0]+.587*c[1]+.114*c[2])/255,ink=c=>lum(c)>.55?'#1a1426':'#fff';
+function cover(x,o,X,Y,W,H,r=0){x.save();if(r){x.beginPath();x.roundRect(X,Y,W,H,r);x.clip()}const k=Math.max(W/o.w,H/o.h),w=o.w*k,h=o.h*k;x.drawImage(o.el,X+(W-w)/2,Y+(H-h)/2,w,h);x.restore()}
+function wrap(x,t,X,Y,mw,lh){const ws=(t||'').split(' ');let l='',y=Y;for(const w of ws){const n=l+w+' ';if(x.measureText(n).width>mw&&l){x.fillText(l.trim(),X,y);l=w+' ';y+=lh}else l=n}x.fillText(l.trim(),X,y);return y+lh}
+function doodle(x,W,H,pal,R,y0,y1,emo){const dm=$('#dood').value;if(dm=='none')return;x.save();x.lineWidth=10;x.lineCap='round';if(dm=='tema'){const ic=S.ic||['🤖'];x.font='84px serif';x.textAlign='center';x.globalAlpha=.9;for(let i=0;i<5;i++){x.save();x.translate(90+R()*(W-180),y0+60+R()*Math.max(40,y1-y0-60));x.rotate((R()-.5)*.6);x.fillText(ic[i%ic.length],0,0);x.restore()}x.textAlign='left'}for(let i=0;i<(dm=='full'?6:0);i++){const c=rgb(pal[(i+1)%pal.length]),px=R()*W,py=y0+R()*(y1-y0),s=30+R()*50;x.strokeStyle=x.fillStyle=c;x.globalAlpha=.85;const k=i%4;
+if(k==0){x.beginPath();x.arc(px,py,s/2,0,7);x.stroke()}else if(k==1){x.beginPath();for(let j=0;j<10;j++){const a=j*Math.PI/5,r=j%2?s/3:s;x.lineTo(px+Math.cos(a)*r,py+Math.sin(a)*r)}x.closePath();x.fill()}else if(k==2){x.beginPath();x.moveTo(px-s,py);for(let j=1;j<=4;j++)x.quadraticCurveTo(px-s+j*s/2-s/4,py+(j%2?-1:1)*s/3,px-s+j*s/2,py);x.stroke()}else{x.beginPath();x.arc(px,py,s/4,0,7);x.fill()}}
+x.globalAlpha=1;x.font='130px serif';x.textAlign='left';x.save();x.translate(W-190,y0+90);x.rotate((R()-.5)*.5);x.fillText(emo||'✨',0,0);x.restore();x.restore()}
+function draw(o,i,n,W,H){S.ic=TOP[tpx(o)||mainTp()].ic;const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d'),R=rng(S.seed*100+i*13),p=pl(o),dark=p.slice().sort((a,b)=>lum(a)-lum(b))[0],lite=p.slice().sort((a,b)=>lum(b)-lum(a))[0],F='system-ui,sans-serif';x.textBaseline='alphabetic';x.textAlign='left';
+if(S.style==0){cover(x,o,0,0,W,H);const g=x.createLinearGradient(0,H*.45,0,H);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,`rgba(${dark.map(v=>v*.35)},.92)`);x.fillStyle=g;x.fillRect(0,H*.45,W,H*.55);doodle(x,W,H,p,R,60,H*.35,o.emoji);
+x.fillStyle='#fff';x.font=`800 ${H>1500?110:96}px ${F}`;let y=wrap(x,o.title,70,H-300,W-140,100);x.font=`500 46px ${F}`;x.fillStyle='#ffffffdd';wrap(x,o.phrase,70,y-10,W-140,58)}
+else if(S.style==1){x.fillStyle=rgb(lite);x.fillRect(0,0,W,H);const fh=H*.62;cover(x,o,60,60,W-120,fh,40);doodle(x,W,H,p,R,fh*.4,fh+60,o.emoji);const tc=ink(lite);x.fillStyle=tc;x.font=`800 84px Georgia,serif`;let y=wrap(x,o.title,70,fh+190,W-140,92);x.font=`italic 44px Georgia,serif`;wrap(x,o.phrase,70,y,W-140,56);x.font=`600 30px ${F}`;x.globalAlpha=.5;x.fillText(`${i+1} / ${n}`,W-160,H-50);x.globalAlpha=1}
+else if(S.style==2){x.fillStyle=rgb(p[1]);x.fillRect(0,0,W,H);x.fillStyle=rgb(p[2]);x.beginPath();x.arc(W*.85,H*.12,300,0,7);x.fill();x.save();x.translate(W/2,H*.40);x.rotate((R()-.5)*.14);x.fillStyle='#fff';x.shadowColor='#0006';x.shadowBlur=40;x.fillRect(-W*.4,-H*.28,W*.8,H*.52);x.shadowBlur=0;cover(x,o,-W*.4+24,-H*.28+24,W*.8-48,H*.52-90,8);x.restore();doodle(x,W,H,p,R,H*.55,H*.7,o.emoji);x.fillStyle=ink(p[1]);x.font=`900 92px ${F}`;let y=wrap(x,(o.title||'').toUpperCase(),70,H*.76,W-140,98);x.font=`600 44px ${F}`;wrap(x,o.phrase,70,y,W-140,56)}
+else if(S.style==3){x.fillStyle=rgb(dark.map(v=>v*.25|0));x.fillRect(0,0,W,H);x.strokeStyle=rgb(p[1]);x.globalAlpha=.14;x.lineWidth=2;for(let g=0;g<W;g+=60){x.beginPath();x.moveTo(g,0);x.lineTo(g,H);x.stroke()}for(let g=0;g<H;g+=60){x.beginPath();x.moveTo(0,g);x.lineTo(W,g);x.stroke()}x.globalAlpha=1;const fh=H*.55;x.shadowColor=rgb(p[0]);x.shadowBlur=40;x.strokeStyle=rgb(p[0]);x.lineWidth=8;x.beginPath();x.roundRect(60,70,W-120,fh,24);x.stroke();x.shadowBlur=0;cover(x,o,68,78,W-136,fh-16,18);doodle(x,W,H,p,R,fh*.5,fh+70,o.emoji);x.fillStyle=rgb(p[0]);x.font='800 74px ui-monospace,monospace';let y=wrap(x,'> '+(o.title||''),70,fh+190,W-140,84);x.fillStyle='#e8e8ff';x.font='500 42px ui-monospace,monospace';wrap(x,o.phrase,70,y,W-140,54)}
+else if(S.style==4){x.fillStyle='#fafafa';x.fillRect(0,0,W,H);cover(x,o,0,0,W,H*.68);x.fillStyle=rgb(p[0]);x.fillRect(70,H*.68+50,120,12);x.fillStyle='#16121f';x.font=`800 80px ${F}`;let y=wrap(x,o.title,70,H*.68+170,W-140,88);x.fillStyle='#4a4560';x.font=`400 42px ${F}`;wrap(x,o.phrase,70,y,W-140,54)}
+else if(S.style==5){x.fillStyle='#0d3b78';x.fillRect(0,0,W,H);x.strokeStyle='#fff';x.lineWidth=2;for(let g=0;g<W;g+=30){x.globalAlpha=g%150?.07:.2;x.beginPath();x.moveTo(g,0);x.lineTo(g,H);x.stroke()}for(let g=0;g<H;g+=30){x.globalAlpha=g%150?.07:.2;x.beginPath();x.moveTo(0,g);x.lineTo(W,g);x.stroke()}x.globalAlpha=1;
+const fh=H*(H<1200?.5:.56),X0=80,Y0=80,PW=W-160;cover(x,o,X0,Y0,PW,fh);x.fillStyle='rgba(13,59,120,.22)';x.fillRect(X0,Y0,PW,fh);x.strokeStyle='#fff';x.lineWidth=6;x.strokeRect(X0,Y0,PW,fh);x.lineWidth=3;for(const[cx,cy]of[[X0,Y0],[X0+PW,Y0],[X0,Y0+fh],[X0+PW,Y0+fh]]){x.beginPath();x.moveTo(cx-26,cy);x.lineTo(cx+26,cy);x.moveTo(cx,cy-26);x.lineTo(cx,cy+26);x.stroke()}
+const dy=Y0+fh+36;x.beginPath();x.moveTo(X0,dy);x.lineTo(X0+PW,dy);x.moveTo(X0,dy-12);x.lineTo(X0,dy+12);x.moveTo(X0+PW,dy-12);x.lineTo(X0+PW,dy+12);x.stroke();doodle(x,W,H,p,R,Y0+fh*.4,Y0+fh,o.emoji);
+x.fillStyle='#fff';x.font='800 74px ui-monospace,monospace';let y=wrap(x,(o.title||'').toUpperCase(),X0,dy+100,PW,82);x.fillStyle='#bcd7ff';x.font='500 40px ui-monospace,monospace';wrap(x,o.phrase,X0,y-4,PW,52);x.fillStyle='#fff';x.font='600 26px ui-monospace,monospace';x.textAlign='right';x.fillText(`FIG. ${i+1}/${n}`,W-80,H-40);x.textAlign='left'}
+else if(S.style==6){x.fillStyle='#24332d';x.fillRect(0,0,W,H);for(let k=0;k<240;k++){x.fillStyle=`rgba(255,255,255,${R()*.05})`;x.beginPath();x.arc(R()*W,R()*H,R()*90+10,0,7);x.fill()}x.strokeStyle='#8a5a33';x.lineWidth=36;x.strokeRect(18,18,W-36,H-36);
+const fh=H*(H<1200?.44:.5),PW=W-220;x.save();x.translate(W/2,86+fh/2+14);x.rotate((R()-.5)*.05);x.shadowColor='#0008';x.shadowBlur=24;x.fillStyle='#f5f1e6';x.fillRect(-PW/2-14,-fh/2-14,PW+28,fh+28);x.shadowBlur=0;cover(x,o,-PW/2,-fh/2,PW,fh,4);x.fillStyle='rgba(255,235,150,.75)';x.fillRect(-70,-fh/2-34,140,40);x.restore();
+doodle(x,W,H,p,R,fh*.5,fh+90,o.emoji);const ff='"Comic Sans MS","Bradley Hand","Segoe Print",cursive';x.fillStyle='#f5f1e6';x.font=`700 90px ${ff}`;const ty=fh+250;let y=wrap(x,o.title,70,ty,W-140,98);x.strokeStyle='#f5f1e6';x.lineWidth=6;x.lineCap='round';x.beginPath();x.moveTo(70,ty+16);for(let u=0;u<=10;u++)x.lineTo(70+u*38,ty+16+(u%2?7:-7));x.stroke();x.fillStyle='#d9e8c8';x.font=`500 46px ${ff}`;wrap(x,o.phrase,70,y+6,W-140,58)}
+stk(x,o,W,H);return c}
+function collage(W,H){S.ic=TOP[tpx(S.items[0])||mainTp()].ic;const its=S.items.slice(0,4),p=pl(its[0]),c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.fillStyle=rgb(p[2]);x.fillRect(0,0,W,H);const g=30,cw=(W-g*3)/2,ch=(H-g*3-260)/2;its.forEach((o,i)=>cover(x,o,g+(i%2)*(cw+g),g+(i/2|0)*(ch+g),cw,ch,24));x.fillStyle=ink(p[2]);x.font='800 86px system-ui,sans-serif';wrap(x,its[0].title,g+20,H-170,W-100,90);x.font='500 42px system-ui,sans-serif';wrap(x,its[0].phrase,g+20,H-80,W-100,50);doodle(x,W,H,p,rng(S.seed),H-420,H-250,its[0].emoji);stk(x,its[0],W,H);return c}
+function mk(i){const[W,H]=SZ[$('#ratio').value],m=$('#mode').value;if(m=='collage')return collage(W,H);const a=m=='single'?S.items.slice(0,1):S.items;return draw(a[i],i,a.length,W,H)}
+function render(){const b=$('#slides');b.innerHTML='';if(!S.items.length){b.innerHTML='<p style="color:var(--mu)">Acá vas a ver tus slides.</p>';return}const m=$('#mode').value,n=m=='carousel'?S.items.length:1;for(let i=0;i<n;i++){const c=mk(i);c.dataset.i=i;b.append(c)}}
+$('#styles').onclick=e=>{const t=e.target;if(t.id=='rmx'){S.seed++}else if(t.dataset.s){S.style=+t.dataset.s;document.querySelectorAll('#styles [data-s]').forEach(b=>b.classList.toggle('on',b==t))}else return;render()};
+$('#mode').onchange=$('#ratio').onchange=render;
+// ---- exportar
+const blobs=()=>Promise.all([...document.querySelectorAll('#slides canvas')].map((c,i)=>new Promise(r=>c.toBlob(b=>r(new File([b],`post-${i+1}.png`,{type:'image/png'})),'image/png'))));
+async function exp(){S.ex=1;render();const f=await blobs();S.ex=0;render();return f}
+$('#dl').onclick=async()=>{for(const f of await exp()){const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;a.click();await new Promise(r=>setTimeout(r,250))}};
+$('#sh').onclick=async()=>{const f=await exp();if(!f.length)return;if(navigator.canShare&&navigator.canShare({files:f}))navigator.share({files:f,text:$('#cap').value}).catch(()=>{});else st('Tu navegador no comparte archivos: usá Descargar y subilos a Instagram.')};
+$('#cp').onclick=()=>navigator.clipboard.writeText($('#cap').value).then(()=>st('Texto copiado ✔'));
+// ---- perfil
+$('#igo').onclick=()=>{const u=$('#ig').value.replace('@','').trim();if(u)open('https://www.instagram.com/'+encodeURIComponent(u),'_blank','noopener')};
+function fix(s){try{return decodeURIComponent(escape(s))}catch(e){return s}}
+function grab(o,a){if(typeof o=='string')return;if(Array.isArray(o))o.forEach(v=>grab(v,a));else if(o)for(const k in o){if((k=='title'||k=='caption')&&typeof o[k]=='string'&&o[k].length>2)a.push(fix(o[k]));else grab(o[k],a)}}
+$('#igj').onchange=async e=>{try{const a=[];for(const f of e.target.files)grab(JSON.parse(await f.text()),a);const u=[...new Set(a.map(v=>v.trim()).filter(Boolean))];if(!u.length){$('#prof').textContent='No encontré captions en ese archivo. Probá con posts_1.json (formato JSON).';return}$('#old').value=u.join('\n---\n');$('#ana').click()}catch(x){$('#prof').textContent='No pude leer ese JSON. Elegí el formato JSON al descargar tu información.'}};
+const V=/(^|[^\p{L}])(vos|probá|mirá|contanos|animate|sumate|compartí|seguinos|dejanos|escribinos)(?![\p{L}])/iu,HR=/#[\p{L}\d_]+/gu;
+function estilo(t){const caps=[...new Set(t.split('---').map(v=>v.trim()).filter(v=>v.length>10))];if(!caps.length)return null;const N=caps.length,top=(a,n)=>Object.entries(a.reduce((m,v)=>(m[v]=(m[v]||0)+1,m),{})).sort((a,b)=>b[1]-a[1]).slice(0,n).map(v=>v[0]),all=t.match(HR)||[],tags=top(all,8),em=top(t.match(/\p{Extended_Pictographic}/gu)||[],5),len=Math.round(caps.reduce((s,c)=>s+c.replace(HR,'').trim().length,0)/N),ht=Math.round(all.length/N),q=caps.filter(c=>/\?/.test(c)).length/N>.3,vos=caps.filter(c=>V.test(c)).length/N>.2,cta=caps.filter(c=>/(coment|contanos|guard|compart|seguinos|etiquet|escrib)/i.test(c)).length/N>.3,ex=caps.filter(c=>c.replace(HR,'').trim().length>50).slice(0,3).map(c=>c.replace(HR,'').replace(/\s+/g,' ').trim().slice(0,240));
+const sum=`${N} captions analizados, de ~${len} caracteres sin hashtags${vos?', usa voseo':''}${q?', suele hacer preguntas':''}${cta?', cierra con una invitación a la acción':''}${em.length?', emojis típicos '+em.join(''):''}${ht?', ~'+ht+' hashtags por post':''}${tags.length?', hashtags frecuentes '+tags.slice(0,5).join(' '):''}`;return{tags,em,sum,ex}}
+$('#ana').onclick=()=>{const t=$('#old').value;if(t.trim().length<10)return $('#prof').textContent='Pegá al menos un caption.';const r=estilo(t);if(!r)return $('#prof').textContent='No encontré captions válidos.';S.prof=r;try{localStorage.igprof=JSON.stringify(r)}catch(e){}$('#prof').textContent='Estilo detectado: '+r.sum+'. Se usará al generar con IA y en los hashtags.'};
+$('#clr').onclick=()=>{S.prof=null;try{localStorage.removeItem('igprof')}catch(e){}$('#old').value='';$('#prof').textContent='Estilo borrado.'};
+if(S.prof)$('#prof').textContent='Estilo guardado: '+S.prof.sum;
+const STK={'🤖 Robótica':['🤖','🦾','🦿','⚙️','🔧','🔩','🔋','📡','🚗','⚡','🕹️','🛞'],'💻 Código':['💻','⌨️','🧠','🐍','</>','{ }','if/else','while(1)','Hello World','0101','Python','Arduino','Scratch'],'🥽 RV / RA':['🥽','👓','📱','🌐','🔮','🕶️','🪐','👾','RV','RA','360°','AR'],'🖨️ Impresión 3D':['🖨️','🧊','📐','🧱','📏','🛠️','🧵','STL','3D','PLA','Layer','CAD'],'🏁 Proyectos':['🛣️','⚽','🦿','Otto','Sigue línea','RoboFútbol','Servo','Ultrasonido','micro:bit','mBlock','Arduino UNO','Sensor IR'],'🎓 Educación':['🎓','📚','✏️','💡','🏫','🔬','🚀','🧪','⭐','🏆','🧑‍🏫','🧑‍💻']};
+let tab=Object.keys(STK)[0],dr=null;S.cur=0;
+function sig(x,W,H){if(!$('#sign').checked)return;x.save();x.font='600 24px system-ui,sans-serif';x.textAlign='left';x.textBaseline='alphabetic';x.lineJoin='round';x.lineWidth=6;x.strokeStyle='rgba(0,0,0,.6)';x.fillStyle='#fff';const t='Didáctica Aumentada 3.0 • Code Club Ñandutí';x.strokeText(t,36,46);x.fillText(t,36,46);x.restore()}
+function stk(x,o,W,H){sig(x,W,H);(o.st||[]).forEach(t=>{const s=t.s;x.save();x.translate(t.x*W,t.y*H);x.rotate(t.r||0);x.textAlign='center';x.textBaseline='middle';x.lineJoin='round';
+if(/[\w<{(\/]/.test(t.t)){x.font=`800 ${s*.42}px ui-monospace,monospace`;const w=x.measureText(t.t).width+s*.5,h=s*.65;t.bw=w;t.bh=h;x.fillStyle='#fff';x.strokeStyle='#111';x.lineWidth=6;x.beginPath();x.roundRect(-w/2,-h/2,w,h,h/2);x.fill();x.stroke();x.fillStyle='#111';x.fillText(t.t,0,2)}
+else{x.font=`${s}px serif`;t.bw=t.bh=s*1.1;x.fillText(t.t,0,0)}
+if(!S.ex&&t==S.sel){x.setLineDash([14,10]);x.lineWidth=5;x.strokeStyle='#ff5fa2';x.strokeRect(-t.bw/2-8,-t.bh/2-8,t.bw+16,t.bh+16)}x.restore()})}
+const cur=()=>S.items[$('#mode').value=='carousel'?Math.min(S.cur,S.items.length-1):0];
+function addSt(t){const o=cur();if(!o)return st('Primero subí una foto.');(o.st=o.st||[]).push(S.sel={t,x:.5+(Math.random()-.5)*.4,y:.28+Math.random()*.12,s:170,r:(Math.random()-.5)*.4});render()}
+function sbuild(){$('#stabs').innerHTML=Object.keys(STK).map(k=>`<button data-k="${k}" class="${k==tab?'on':''}">${k}</button>`).join('');$('#sgrid').innerHTML=STK[tab].map(t=>`<button data-t="${t}" ${/[\w<{(\/]/.test(t)?'style="font-size:13px;font-weight:700"':''}>${t}</button>`).join('')}
+$('#stabs').onclick=e=>{if(e.target.dataset.k){tab=e.target.dataset.k;sbuild()}};
+$('#sgrid').onclick=e=>{if(e.target.dataset.t)addSt(e.target.dataset.t)};
+$('#cadd').onclick=()=>{const v=$('#cin').value.trim();if(v){addSt(v);$('#cin').value=''}};
+const sel=f=>{if(S.sel){f(S.sel);render()}};
+$('#szp').onclick=()=>sel(t=>t.s*=1.2);$('#szm').onclick=()=>sel(t=>t.s=Math.max(60,t.s/1.2));$('#rot').onclick=()=>sel(t=>t.r=(t.r||0)+.25);
+$('#del').onclick=()=>{const o=cur();if(!o||!o.st)return;const i=o.st.indexOf(S.sel);o.st.splice(i<0?o.st.length-1:i,1);S.sel=null;render()};
+$('#pal').onchange=e=>{S.pal=e.target.value;render()};
+$('#pv').onclick=()=>$('#slides').scrollBy({left:-300,behavior:'smooth'});$('#nx').onclick=()=>$('#slides').scrollBy({left:300,behavior:'smooth'});
+function redraw(c){c.getContext('2d').drawImage(mk(+c.dataset.i),0,0)}
+const pt=(e,c)=>{const r=c.getBoundingClientRect();return[(e.clientX-r.left)*c.width/r.width,(e.clientY-r.top)*c.height/r.height]};
+$('#slides').addEventListener('pointerdown',e=>{const c=e.target;if(c.tagName!='CANVAS')return;const i=+c.dataset.i;S.cur=i;$('#cur').textContent='Slide '+(i+1);const o=$('#mode').value=='collage'?S.items[0]:S.items[i],[px,py]=pt(e,c);S.sel=null;dr=null;
+for(const t of (o.st||[]).slice().reverse()){if(Math.abs(px-t.x*c.width)<(t.bw||100)/2&&Math.abs(py-t.y*c.height)<(t.bh||100)/2){S.sel=t;dr={c,t,dx:px-t.x*c.width,dy:py-t.y*c.height};c.setPointerCapture(e.pointerId);break}}
+document.querySelectorAll('#slides canvas').forEach(redraw)});
+$('#slides').addEventListener('pointermove',e=>{if(!dr)return;const[px,py]=pt(e,dr.c);dr.t.x=(px-dr.dx)/dr.c.width;dr.t.y=(py-dr.dy)/dr.c.height;redraw(dr.c)});
+addEventListener('pointerup',()=>dr=null);
+$('#topic').innerHTML+=Object.entries(TOP).map(([k,v])=>`<option value="${k}">${v.n}</option>`).join('');
+$('#topic').onchange=()=>{if(S.items.length){fill(local());list();render();st('Textos base actualizados a la temática elegida. Tocá ✨ para mejorarlos con IA.')}};
+$('#dood').onchange=$('#sign').onchange=render;
+$('#vis').onchange=async()=>{if(!$('#vis').checked)return;for(const o of S.items){if(!o.note){st('Describiendo fotos con IA de visión…');await vis(o)}}if(S.items.length){fill(local());list();render();st('Listo. Revisá el «qué se ve» de cada foto y corregilo si hace falta.')}};
+$('#clip').onchange=async()=>{if(!$('#clip').checked)return;for(const o of S.items){if(!o.tp&&!o.man){st('Reconociendo fotos…');await recog(o)}}if(S.items.length){fill(local());list();render();st('Listo. Revisá lo reconocido y corregilo si hace falta.')}};
+// ---- UI de IA / token
+function tokUI(){const p=$('#prov').value;$('#tok').style.display=$('#tt').style.display=p=='local'?'none':'';$('#tok').value=TK[p]||'';
+$('#tok').placeholder=p=='gemini'?'🔑 API key de Gemini (empieza con AIza…)':'🔑 Token de Pollinations (si lo pide)';
+$('#tokhelp').innerHTML=p=='gemini'?'Gratis en <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>. El texto (y la foto, si activás la IA de visión) se envían directo a Google desde tu navegador.':p=='poll'?'Servicio gratuito externo; si falla, creá un token en <a href="https://enter.pollinations.ai" target="_blank" rel="noopener">enter.pollinations.ai</a>. Solo envía texto.':'Usa solo los textos base de la app, sin conexión.'}
+function tokSave(){LSS('igs_rem',$('#rem').checked?'1':'');for(const k in PK)LSS(PK[k],$('#rem').checked?TK[k]:'')}
+for(const k in PK)TK[k]=LSG(PK[k]);$('#rem').checked=!!LSG('igs_rem');
+$('#prov').value=LSG('igs_prov')||(TK.gemini?'gemini':'poll');if(!$('#prov').value)$('#prov').value='poll';tokUI();
+if(TK.gemini&&$('#prov').value=='gemini')$('#vis').checked=true;
+$('#prov').onchange=()=>{LSS('igs_prov',$('#prov').value);tokUI()};
+$('#tok').oninput=()=>{TK[$('#prov').value]=$('#tok').value.trim();tokSave()};$('#rem').onchange=tokSave;
+$('#tt').onclick=async()=>{const p=$('#prov').value;if(p=='gemini'&&!TK.gemini)return st('Pegá primero tu API key de Gemini.');st('Probando '+PN[p]+'…');try{const g=p=='gemini'?await gemTry([{text:'Respondé solo: ok'}],{key:TK.gemini,json:0}):await pollTxt([{role:'user',content:'Respondé solo: ok'}],['openai','mistral']);st('✔ '+PN[p]+' funciona (modelo '+g.m+').')}catch(e){st('✖ '+PN[p]+': '+(e.message||e))}};
+sbuild();render();
+</script>
+<script>
+// ===== 🎬 Video corto · plugins: lector de YouTube · efectos automáticos · música =====
+(()=>{
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),rgba=(c,a)=>`rgba(${c[0]},${c[1]},${c[2]},${a})`,back=k=>{const c=1.70158;return 1+(c+1)*Math.pow(k-1,3)+c*Math.pow(k-1,2)};
+const vst=t=>$('#vst').textContent=t,yst=t=>$('#yst').textContent=t,pj=t=>JSON.parse(t.match(/\{[\s\S]*\}/)[0]);
+
+// ---------- registro de plugins (se pueden apagar desde «🧩 Plugins»)
+const PLUG=[{id:'yt',n:'🔗 Lector de links de YouTube',el:'#p-yt'},{id:'fx',n:'✨ Efectos especiales automáticos',el:'#p-fx'},{id:'mu',n:'🎵 Música sintetizada',el:'#p-mu'}];
+let on={};try{on=JSON.parse(LSG('igs_plug')||'{}')}catch(e){}
+const isOn=id=>on[id]!==false;
+function plugUI(){$('#plugl').innerHTML=PLUG.map(p=>`<label class="chk"><input type="checkbox" data-pl="${p.id}" ${isOn(p.id)?'checked':''}> ${p.n}</label>`).join('');PLUG.forEach(p=>$(p.el).hidden=!isOn(p.id))}
+$('#plugl').onchange=e=>{const id=e.target.dataset.pl;if(!id)return;on[id]=e.target.checked;LSS('igs_plug',JSON.stringify(on));plugUI()};
+
+// ---------- plugin YouTube
+const YT={id:'',meta:null,info:null,thumb:null},V={tp:''};
+const ytId=u=>{const m=String(u||'').trim().match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:[^#]*&)?v=|shorts\/|embed\/|live\/|v\/))([\w-]{11})/i);return m?m[1]:''};
+async function ytMeta(id){const u='https://www.youtube.com/watch?v='+id;for(const e of['https://www.youtube.com/oembed?format=json&url=','https://noembed.com/embed?url=']){try{const r=await fetch(e+encodeURIComponent(u));if(!r.ok)continue;const j=await r.json();if(j.title)return{title:j.title,author:j.author_name||''}}catch(x){}}return null}
+function ytThumb(id){const names=['maxresdefault','hq720','hqdefault'];return new Promise(res=>{const tryN=i=>{if(i>=names.length)return res(null);const im=new Image();im.crossOrigin='anonymous';im.onload=()=>{if(im.naturalWidth<200)return tryN(i+1);let el=im,w=im.naturalWidth,h=im.naturalHeight;if(names[i]=='hqdefault'){const c=document.createElement('canvas'),cut=Math.round(h*.125);c.width=w;c.height=h-2*cut;c.getContext('2d').drawImage(im,0,-cut);el=c;h=c.height}res({el,w,h})};im.onerror=()=>tryN(i+1);im.src='https://i.ytimg.com/vi/'+id+'/'+names[i]+'.jpg'};tryN(0)})}
+const YJ=()=>'{"tema":"<una de estas claves: '+Object.keys(TOP).join(', ')+'>","titulo":"título corto en español","resumen":"2 oraciones","puntos":["entre 4 y 6 ideas clave, máx 12 palabras cada una, redactadas como texto de pantalla para un video corto"],"momentos":[{"t":"mm:ss","que":"qué pasa"}],"gancho":"frase de apertura de máx 8 palabras","cierre":"frase de cierre con invitación a la acción, máx 10 palabras","hashtags":["#a","#b","#c","#d","#e"]}';
+async function ytRead(){
+ const id=ytId($('#yu').value);if(!id)return yst('No reconozco ese link. Probá con youtube.com/watch?v=…, youtu.be/… o youtube.com/shorts/…');
+ const b=$('#yb');b.disabled=true;YT.id=id;YT.info=null;yst('Leyendo el link…');
+ try{
+  const [meta,th]=await Promise.all([ytMeta(id),ytThumb(id)]);YT.meta=meta;YT.thumb=th;
+  const tr=$('#ytt').value.trim();let info=null,how='',errs=[];
+  if(TK.gemini){try{yst('Gemini está mirando el video (puede tardar un minuto)…');
+   const g=await gemTry([{fileData:{fileUri:'https://www.youtube.com/watch?v='+id}},{text:'Mirá este video de YouTube y respondé SOLO un JSON con este formato: '+YJ()+'. Basate solo en lo que realmente se ve y se dice en el video; no inventes datos. '+(tr?'Transcripción de apoyo: '+tr.slice(0,12000):'')}],{key:TK.gemini,to:120000});
+   info=pj(g.text);how='Gemini miró el video ('+g.m+')'}catch(e){errs.push('Gemini: '+(e.message||e))}}
+  if(!info){try{yst('Analizando '+(tr?'la transcripción':'el título')+'…');
+   const base='Título del video: '+(meta&&meta.title||'(desconocido)')+'\nCanal: '+(meta&&meta.author||'')+'\n'+(tr?'Transcripción:\n'+tr.slice(0,12000):'(No tengo la transcripción ni el video: inferí solo desde el título y avisalo en el resumen.)');
+   const g=await pollTxt([{role:'system',content:'Sos editor de videos cortos educativos en español rioplatense. Respondé SOLO un JSON válido.'},{role:'user',content:base+'\n\nCon esos datos de un video de YouTube respondé SOLO un JSON con este formato: '+YJ()+'. No inventes datos.'}],['qwen-coder','mistral','openai']);
+   info=pj(g.text);how=tr?'a partir de la transcripción':'solo por el título: no pudo ver el video'}catch(e){errs.push('IA gratuita: '+(e.message||e))}}
+  if(!info&&meta){info={tema:guess(meta.title)||'general',titulo:meta.title,puntos:[]};how='sin IA: solo título y miniatura'}
+  if(!info)throw new Error(errs.join(' · ')||'no pude leer ese video');
+  info.puntos=(info.puntos||[]).map(String).slice(0,8);YT.info=info;V.tp=TOP[info.tema]?info.tema:'';
+  ytShow(how);yst(errs.length?'⚠ '+errs.join(' · '):'')
+ }catch(e){yst('✖ '+(e.message||e))}
+ b.disabled=false}
+const sec=t=>{const a=String(t).split(':').map(Number);return a.some(isNaN)?0:a.reduce((s,v)=>s*60+v,0)};
+function ytShow(how){const i=YT.info,m=YT.meta||{};
+ $('#yr').innerHTML=`<div class="it" style="grid-template-columns:96px 1fr"><img src="https://i.ytimg.com/vi/${YT.id}/mqdefault.jpg" style="width:96px;height:64px" alt=""><div><b>${esc(i.titulo||m.title||'(sin título)')}</b><small>${esc(m.author||'')}${how?' · '+esc(how):''}</small></div></div>`+
+ (i.resumen?`<p style="font-size:13px;margin:8px 0">${esc(i.resumen)}</p>`:'')+
+ `<small style="color:var(--mu)">Temática detectada: <b>${esc(TOP[i.tema]?TOP[i.tema].n:'—')}</b></small>`+
+ (i.puntos.length?`<ol class="g">${i.puntos.map(p=>`<li>${esc(p)}</li>`).join('')}</ol>`:'')+
+ ((i.momentos&&i.momentos.length)?`<small style="color:var(--mu);display:block;margin-bottom:6px">Momentos: ${i.momentos.slice(0,6).map(o=>`<a href="https://www.youtube.com/watch?v=${YT.id}&t=${sec(o.t)}s" target="_blank" rel="noopener">${esc(o.t)}</a> ${esc(o.que)}`).join(' · ')}</small>`:'')+
+ `<div class="row"><button id="yuse" class="p">➕ Usar como guion del video</button></div>`}
+$('#yr').onclick=e=>{if(e.target.id!='yuse'||!YT.info)return;const i=YT.info;$('#vs').value=[i.gancho,...i.puntos,i.cierre].filter(Boolean).map(s=>String(s).replace(/\n/g,' ')).join('\n');
+ if(!$('#cap').value.trim()&&i.resumen)$('#cap').value=i.resumen+'\n\n'+(i.hashtags||[]).map(h=>'#'+String(h).replace(/[^\p{L}\d_]/gu,'')).filter(h=>h.length>1).slice(0,6).join(' ');
+ vst('Guion cargado desde el video. Editalo si querés y tocá 🎬.')};
+$('#yb').onclick=ytRead;$('#yu').onkeydown=e=>{if(e.key=='Enter')ytRead()};
+
+// ---------- guion con IA
+$('#vai').onclick=async()=>{const b=$('#vai');b.disabled=true;vst('Escribiendo guion…');
+ const n=clamp(S.items.length||6,4,8),T=TOP[V.tp||mainTp()],i=YT.info,pv=$('#prov').value;
+ const ins=[`Tema: ${$('#theme').value||T.n}.`,i?`Video de YouTube «${i.titulo||''}». Resumen: ${i.resumen||''}. Ideas: ${(i.puntos||[]).join(' / ')}.`:'',S.items.map((o,k)=>`Foto ${k+1}: ${describe(o)}`).join('\n'),`Tipo: ${$('#kind').selectedOptions[0].text}. Tono: ${$('#tone').value}.`,
+  `Escribí el guion de un video corto vertical de ${n} escenas. Respondé SOLO un JSON: {"escenas":["Título | frase", ...]} con exactamente ${n} escenas; título de máx 3 palabras y frase de máx 10 palabras; la primera es un gancho que atrapa en 2 segundos y la última invita a probarlo en el aula. No inventes datos ni tecnología que no esté descripta.`].filter(Boolean).join('\n');
+ const sys='Sos guionista de videos cortos educativos en español rioplatense. '+EDU+' Respondé SOLO un JSON válido.';let L=null,how='';
+ try{if(pv!='local'&&navigator.onLine){const g=(pv=='gemini'&&TK.gemini)?await gemTry([{text:ins}],{key:TK.gemini,sys}):await pollTxt([{role:'system',content:sys},{role:'user',content:ins}],['qwen-coder','mistral','openai']);L=pj(g.text).escenas;how='con IA ('+g.m+')'}}catch(e){how='sin IA ('+(e.message||e)+')'}
+ if(!Array.isArray(L)||!L.length){L=T.ti.map((a,k)=>a+' | '+T.ph[k%5]).slice(0,n);how=how||'con el generador local'}
+ $('#vs').value=L.map(String).join('\n');vst('Guion listo '+how+'. Editalo a gusto.');b.disabled=false};
+
+// ---------- plugin de efectos: tema + palabras clave => efectos
+const PRE={otto:['sparks','emo'],sigue:['neon','emo'],futbol:['confetti','shake'],microbit:['matrix','scan'],scratch:['emo','confetti'],rv:['neon','stars','glitch'],ra:['stars','glitch','emo'],imp3d:['layers','sparks','scan'],arduino:['matrix','glitch'],robotica:['scan','sparks','emo'],mate:['emo','confetti'],juego:['confetti','emo'],desench:['emo','flash'],ciencia:['bubbles','stars'],maker:['confetti','emo'],stream:['rec','glitch','flash'],aula:['emo','bubbles'],general:['bubbles','emo']};
+const KW=[[/\bgol\b|ganamos|gan[oó]|campe|logr|[eé]xito|felicit|🎉|premio/i,['confetti','flash']],[/error|falla|\bbug\b|se rompe|problema|depur|no funciona/i,['glitch','shake']],[/idea|descubr|sorpresa|\bwow\b|incre[ií]ble|mir[aá]\b|novedad/i,['flash','stars']],[/espacio|universo|planeta|noche|virtual|galaxia/i,['stars']],[/agua|burbuja|qu[ií]mica|experimento|laboratorio/i,['bubbles']],[/c[oó]digo|program|algoritmo|datos|inteligencia artificial|\bia\b|python|scratch/i,['matrix']],[/fuego|energ[ií]a|velocidad|r[aá]pid|turbo|motor|potencia/i,['sparks','shake']],[/en vivo|\blive\b|stream|transmisi/i,['rec']],[/capa|imprim|\b3d\b|pieza/i,['layers']],[/futuro|ne[oó]n|ciber|tecnolog/i,['neon']]];
+const FXN={glitch:'📺 glitch',matrix:'🟩 lluvia de código',confetti:'🎉 confeti',neon:'🌆 neón',sparks:'✨ chispas',bubbles:'🫧 burbujas',stars:'🌌 estrellas',layers:'🖨️ capas 3D',scan:'📟 scanlines',rec:'🔴 en vivo',flash:'⚡ flash',shake:'💥 sacudón',emo:'🧩 íconos'};
+function fxFor(line,tp){const m=$('#vfx').value;if(m=='none')return['kb'];if(!isOn('fx'))return['kb','vig'];if(m!='auto')return['kb','vig',m];
+ const set=['kb','vig'],add=a=>a.forEach(f=>set.includes(f)||set.push(f));for(const[r,f]of KW)if(r.test(line))add(f);add(PRE[tp]||PRE.general);return set.slice(0,6)}
+const MOOD={tech:['otto','sigue','microbit','arduino','robotica','rv','ra','imp3d','stream'],fun:['futbol','scratch','mate','juego','maker']},moodOf=tp=>MOOD.tech.includes(tp)?'tech':MOOD.fun.includes(tp)?'fun':'calm',PALT={tech:PAL.neon,fun:PAL.retro,calm:PAL.oceano};
+
+// ---------- guion -> escenas
+function scenes(){
+ const raw=$('#vs').value.split('\n').map(l=>l.trim()).filter(Boolean);
+ let L=raw.map(l=>{const a=l.split('|').map(v=>v.trim());return{t:a[0]||'',p:a.slice(1).join(' ')}});
+ if(!L.length&&S.items.length)L=S.items.map(o=>({t:o.title||'',p:o.phrase||'',it:o}));
+ if(!L.length&&YT.info){const i=YT.info;L=[i.gancho,...(i.puntos||[]),i.cierre].filter(Boolean).map(t=>({t:String(t),p:''}))}
+ L=L.filter(l=>l.t||l.p).slice(0,12);
+ const pool=[...S.items];if(YT.thumb&&($('#vbg').checked||!pool.length))pool.push(YT.thumb);
+ return L.map((l,i)=>{const it=l.it||(pool.length?pool[i%pool.length]:null),known=it&&S.items.includes(it),tp=guess(l.t+' '+l.p)||(known&&tpx(it))||V.tp||mainTp(),mood=moodOf(tp),
+  pal=(it&&it.p)?pl(it):(PAL[S.pal]||PALT[mood]),ac=pal.slice().sort((a,b)=>lum(b)-lum(a))[0];
+  return{t:l.t,p:l.p,it,tp,mood,pal,acc:lum(ac)>.45?rgb(ac):'#ffd84d',fx:fxFor(l.t+' '+l.p,tp),v:null}})}
+function prep(s,i){const R=rng(S.seed*77+i*31+5),has=f=>s.fx.includes(f),ic=TOP[s.tp].ic,CC=['#ff5fa2','#7c5cff','#ffd84d','#3dffb0','#4db8ff'];s.i=i;s.pan=[R()-.5,R()-.5];
+ if(has('confetti'))s.cf=Array.from({length:60},()=>({x:R(),y:R(),vy:.12+R()*.2,ph:R()*6,vr:(R()-.5)*8,c:CC[R()*CC.length|0]}));
+ if(has('sparks'))s.sp=Array.from({length:44},()=>({a:R()*Math.PI,v:.3+R()*.7,o:R(),k:R()>.5}));
+ if(has('bubbles'))s.bb=Array.from({length:26},()=>({x:R(),r:10+R()*26,v:.08+R()*.14,o:R(),f:.8+R()*1.5}));
+ if(has('stars'))s.star=Array.from({length:90},()=>({x:R(),y:R(),r:1+R()*2.2,f:1+R()*3,o:R()}));
+ if(has('emo'))s.em=Array.from({length:9},(_,j)=>({x:R(),v:.08+R()*.1,o:R(),f:.8+R()*1.2,sz:70+R()*50,e:ic[j%ic.length]}));
+ if(has('matrix'))s.mx=Array.from({length:20},()=>({v:.25+R()*.5,o:R()}))}
+
+// ---------- efectos (cada uno dibuja sobre el fotograma)
+const SPAT=(()=>{const c=document.createElement('canvas');c.width=c.height=4;const g=c.getContext('2d');g.fillStyle='rgba(0,0,0,.2)';g.fillRect(0,0,4,2);return c})();
+const E={
+ vig(x,W,H){const g=x.createRadialGradient(W/2,H/2,Math.min(W,H)*.35,W/2,H/2,Math.max(W,H)*.75);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.55)');x.fillStyle=g;x.fillRect(0,0,W,H)},
+ flash(x,W,H,t){const a=Math.max(0,1-t/.28)*.8;if(a>0){x.fillStyle=`rgba(255,255,255,${a})`;x.fillRect(0,0,W,H)}},
+ scan(x,W,H,t){x.save();x.fillStyle=x.createPattern(SPAT,'repeat');x.fillRect(0,0,W,H);const y=((t*.4)%1.3-.15)*H,g=x.createLinearGradient(0,y,0,y+H*.12);g.addColorStop(0,'rgba(255,255,255,0)');g.addColorStop(.5,'rgba(255,255,255,.10)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,y,W,H*.12);x.restore()},
+ glitch(x,W,H,t,s){if(!((t*1.7)%1<.16||t<.22))return;const r=rng(Math.floor(t*24)+s.i*99),cv=x.canvas;for(let k=0;k<5;k++){const sy=r()*H,sh=H*(.02+r()*.07),dx=(r()-.5)*W*.14;x.drawImage(cv,0,sy,W,sh,dx,sy,W,sh)}x.save();x.globalCompositeOperation='screen';x.fillStyle='rgba(255,0,90,.16)';x.fillRect(W*.012,0,W,H);x.fillStyle='rgba(0,230,255,.16)';x.fillRect(-W*.012,0,W,H);x.restore()},
+ matrix(x,W,H,t,s,d,b){x.save();x.font=`${28*b}px monospace`;x.textAlign='center';x.textBaseline='middle';const n=s.mx.length;s.mx.forEach((c,j)=>{const hd=((t*c.v*H*1.2)+c.o*H*1.5)%(H*1.5)-H*.2;for(let k=0;k<10;k++){x.globalAlpha=(1-k/10)*.8;x.fillStyle=k?'#3dffb0':'#eafff6';x.fillText(((j*7+k*3+Math.floor(t*9))%2)?'1':'0',(j+.5)/n*W,hd-k*30*b)}});x.restore()},
+ neon(x,W,H,t,s,d,b){const hz=H*.72;x.save();x.strokeStyle='rgba(255,60,200,.8)';x.lineWidth=3*b;for(let i=0;i<9;i++){const u=(i+(t*.9)%1)/9;x.globalAlpha=.25+.5*u;x.beginPath();x.moveTo(0,hz+(H-hz)*u*u);x.lineTo(W,hz+(H-hz)*u*u);x.stroke()}x.globalAlpha=.45;for(let j=-9;j<=9;j++){x.beginPath();x.moveTo(W/2+j*W*.03,hz);x.lineTo(W/2+j*W*.38,H);x.stroke()}x.restore()},
+ confetti(x,W,H,t,s,d,b){for(const p of s.cf){x.save();x.translate(p.x*W+Math.sin(t*2+p.ph)*28*b,((p.y*H+p.vy*H*t)%(H*1.1))-H*.05);x.rotate(p.ph+p.vr*t);x.fillStyle=p.c;x.fillRect(-7*b,-4*b,14*b,8*b);x.restore()}},
+ sparks(x,W,H,t,s,d,b){x.save();x.globalCompositeOperation='lighter';for(const p of s.sp){const u=(t*.9+p.o)%1,dd=u*p.v*W*.5;x.globalAlpha=1-u;x.fillStyle=p.k?'#ffb347':'#fff3b0';x.beginPath();x.arc(W*(.5+.36*Math.sin(p.a*3))+Math.cos(p.a)*dd,H*.82-Math.sin(p.a)*dd*1.4+u*u*H*.12,(3+4*(1-u))*b,0,7);x.fill()}x.restore()},
+ bubbles(x,W,H,t,s,d,b){x.save();x.strokeStyle='#fff';x.fillStyle='#fff';x.lineWidth=2.5*b;for(const p of s.bb){const r=p.r*b,y=H+r-((t*p.v*H+p.o*H*1.3)%(H+2*r)),xx=p.x*W+Math.sin(t*p.f+p.o*9)*22*b;x.beginPath();x.arc(xx,y,r,0,7);x.globalAlpha=.55;x.stroke();x.globalAlpha=.12;x.fill()}x.restore()},
+ stars(x,W,H,t,s,d,b){x.save();x.fillStyle='#fff';for(const p of s.star){x.globalAlpha=.25+.75*Math.abs(Math.sin(t*p.f+p.o*9));x.beginPath();x.arc(p.x*W,p.y*H*.8,p.r*b,0,7);x.fill()}const u=(t%2.2)/.55;if(u<1){x.globalAlpha=1-u;x.strokeStyle='#fff';x.lineWidth=3*b;const px=W*(.95-u*.6),py=H*(.08+u*.28);x.beginPath();x.moveTo(px,py);x.lineTo(px+W*.1,py-H*.035);x.stroke()}x.restore()},
+ emo(x,W,H,t,s,d,b){x.save();x.textAlign='center';x.textBaseline='middle';for(const p of s.em){const sz=p.sz*b;x.font=`${sz}px serif`;x.globalAlpha=.9;x.save();x.translate(p.x*W+Math.sin(t*p.f+p.o*7)*28*b,H+sz-((t*p.v*H+p.o*H*1.4)%(H+2*sz)));x.rotate(Math.sin(t*p.f+p.o)*.4);x.fillText(p.e,0,0);x.restore()}x.restore()},
+ layers(x,W,H,t,s,d,b){const pr=Math.min(1,t/(d*.65)),y=H*pr;x.fillStyle='rgba(6,10,30,.8)';x.fillRect(0,y,W,H-y);x.fillStyle='rgba(255,140,40,.18)';for(let yy=y+14*b;yy<H;yy+=14*b)x.fillRect(0,yy,W,1.5*b);if(pr<1){const g=x.createLinearGradient(0,y-20*b,0,y+6*b);g.addColorStop(0,'rgba(255,170,60,0)');g.addColorStop(1,'rgba(255,200,90,.95)');x.fillStyle=g;x.fillRect(0,y-20*b,W,26*b)}},
+ rec(x,W,H,t,s,d,b){const y=H*.075,X=W*.06;x.save();x.fillStyle='rgba(0,0,0,.55)';x.beginPath();x.roundRect(X,y-22*b,170*b,44*b,22*b);x.fill();x.fillStyle=Math.floor(t*2)%2?'#7a1b1b':'#ff2d2d';x.beginPath();x.arc(X+24*b,y,9*b,0,7);x.fill();x.fillStyle='#fff';x.font=`800 ${22*b}px system-ui`;x.textAlign='left';x.textBaseline='middle';x.fillText('EN VIVO',X+44*b,y+1);x.restore()}
+};
+const PRE_T=['stars','matrix','neon','bubbles','layers','confetti','sparks','emo','glitch','scan'],POST_T=['rec','vig','flash'];
+
+// ---------- fondo y texto
+function bg(x,W,H,s,t,dur){
+ const kb=s.fx.includes('kb'),u=t/dur,z=kb?1.08+.1*(s.i%2?1-u:u):1.04,vv=s.v&&s.v.readyState>=2?s.v:null,it=s.it,w=it?(vv?vv.videoWidth:it.w):0,h=it?(vv?vv.videoHeight:it.h):0;
+ if(it&&w&&h){const k=Math.max(W/w,H/h)*z,dw=w*k,dh=h*k;x.drawImage(vv||it.el,(W-dw)/2+(kb?s.pan[0]*(u-.5)*W*.05:0),(H-dh)/2+(kb?s.pan[1]*(u-.5)*H*.05:0),dw,dh)}
+ else{const p=s.pal,n=p.length,a=t*.4+s.i,g=x.createLinearGradient(W/2+Math.cos(a)*W,H/2+Math.sin(a)*H,W/2-Math.cos(a)*W,H/2-Math.sin(a)*H);
+  g.addColorStop(0,rgba(p[0].map(v=>v*.35|0),1));g.addColorStop(1,rgba(p[1%n].map(v=>v*.6|0),1));x.fillStyle=g;x.fillRect(-20,-20,W+40,H+40);
+  for(let j=0;j<3;j++){const cx=W*(.5+.4*Math.sin(t*.5+j*2+s.i)),cy=H*(.5+.35*Math.cos(t*.4+j*3)),rg=x.createRadialGradient(cx,cy,0,cx,cy,W*.6);rg.addColorStop(0,rgba(p[(j+2)%n],.4));rg.addColorStop(1,rgba(p[(j+2)%n],0));x.fillStyle=rg;x.fillRect(-20,-20,W+40,H+40)}}
+ const lg=x.createLinearGradient(0,H*.3,0,H);lg.addColorStop(0,'rgba(0,0,0,0)');lg.addColorStop(1,'rgba(0,0,0,.65)');x.fillStyle=lg;x.fillRect(-20,H*.3,W+40,H*.7+20)}
+function layout(x,text,maxw){const sp=x.measureText(' ').width,L=[];let l=[],w=0;for(const wd of text.split(/\s+/).filter(Boolean)){const ww=x.measureText(wd).width;if(l.length&&w+sp+ww>maxw){L.push({l,w});l=[];w=0}w+=(l.length?sp:0)+ww;l.push({s:wd,w:ww})}if(l.length)L.push({l,w});return L}
+function text(x,W,H,s,t,b){
+ const tt=(s.t||'').trim(),pp=(s.p||'').trim();if(!tt&&!pp)return;
+ const F='system-ui,"Segoe UI",Roboto,sans-serif',big=(pp?80:92)*b,sm=42*b,gap=tt&&pp?26*b:0;
+ x.save();x.textBaseline='middle';x.textAlign='left';x.lineJoin='round';
+ x.font=`900 ${big}px ${F}`;const TL=tt?layout(x,tt,W*.86):[],sp=x.measureText(' ').width,lh=big*1.14;
+ x.font=`600 ${sm}px ${F}`;const PL=pp?layout(x,pp,W*.84):[],ph=sm*1.35;
+ const top=H*.58-(TL.length*lh+gap+PL.length*ph)/2;let wi=0,hi=-1,hl=0,k0=0;
+ TL.forEach(r=>r.l.forEach(wd=>{if(wd.s.length>hl){hl=wd.s.length;hi=k0}k0++}));
+ TL.forEach((r,j)=>{let xx=(W-r.w)/2;const yy=top+lh*(j+.5);r.l.forEach(wd=>{const k=clamp((t-.08-wi*.1)/.32,0,1);
+  if(k>0){const e=back(k);x.save();x.translate(xx+wd.w/2,yy);x.scale(e,e);x.globalAlpha=Math.min(1,k*3);x.font=`900 ${big}px ${F}`;x.textAlign='center';x.lineWidth=big*.16;x.strokeStyle='rgba(0,0,0,.75)';x.strokeText(wd.s,0,0);
+   if(s.fx.includes('neon')){x.shadowColor=s.acc;x.shadowBlur=24*b}x.fillStyle=wi==hi?s.acc:'#fff';x.fillText(wd.s,0,0);x.restore()}
+  xx+=wd.w+sp;wi++})});
+ let c=Math.floor((t-(.25+Math.min(k0,6)*.1))*30);x.font=`600 ${sm}px ${F}`;x.textAlign='left';x.lineWidth=sm*.2;
+ PL.forEach((r,j)=>{if(c<=0)return;const str=r.l.map(w=>w.s).join(' '),part=str.slice(0,c),yy=top+TL.length*lh+gap+ph*(j+.5);c-=str.length+1;x.strokeStyle='rgba(0,0,0,.7)';x.strokeText(part,(W-r.w)/2,yy);x.fillStyle='#f6f3ff';x.fillText(part,(W-r.w)/2,yy)});
+ x.restore()}
+function frame(x,W,H,s,t,dur){
+ const b=W/720,has=f=>s.fx.includes(f);x.save();x.globalAlpha=1;x.globalCompositeOperation='source-over';
+ const sk=(has('shake')?Math.max(0,1-((t*2)%1)*3)*10:0)+Math.max(0,1-t/.25)*5;if(sk>0)x.translate((Math.random()-.5)*sk*b,(Math.random()-.5)*sk*b);
+ bg(x,W,H,s,t,dur);for(const f of PRE_T)if(has(f))E[f](x,W,H,t,s,dur,b);text(x,W,H,s,t,b);for(const f of POST_T)if(has(f))E[f](x,W,H,t,s,dur,b);x.restore()}
+
+// ---------- plugin de música sintetizada (WebAudio, sin archivos ni derechos)
+function music(ac,dest,total,mood){
+ const M={tech:{bpm:124,root:57,sc:[0,3,5,7,10],w:'sawtooth',kick:1},fun:{bpm:132,root:60,sc:[0,2,4,7,9],w:'triangle',kick:1},calm:{bpm:92,root:57,sc:[0,2,4,7,9],w:'sine',kick:0}}[mood];
+ const step=60/M.bpm/2,t0=ac.currentTime+.05,N=Math.floor(total/step),fr=n=>440*Math.pow(2,(n-69)/12),master=ac.createGain();
+ master.gain.setValueAtTime(.55,t0);master.gain.setValueAtTime(.55,t0+Math.max(0,total-1.2));master.gain.linearRampToValueAtTime(.0001,t0+total);master.connect(dest);
+ const nb=ac.createBuffer(1,Math.floor(ac.sampleRate*.05),ac.sampleRate),nd=nb.getChannelData(0);for(let i=0;i<nd.length;i++)nd[i]=Math.random()*2-1;
+ const note=(f,t,d,v,w)=>{const o=ac.createOscillator(),g=ac.createGain();o.type=w;o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(master);o.start(t);o.stop(t+d+.05)},PT=[0,2,1,3,2,4,3,1];
+ for(let s=0;s<N;s++){const t=t0+s*step,bar=s>>3;
+  if(s%4==0)note(fr(M.root-24+M.sc[[0,0,3,2][bar%4]]),t,step*3.2,.5,'sine');
+  note(fr(M.root+M.sc[PT[s%8]]+(((s>>4)%2)?12:0)),t,step*(M.w=='sine'?1.8:.85),M.w=='sine'?.16:.09,M.w);
+  if(M.kick&&s%4==0){const o=ac.createOscillator(),g=ac.createGain();o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(45,t+.12);g.gain.setValueAtTime(.7,t);g.gain.exponentialRampToValueAtTime(.0001,t+.18);o.connect(g);g.connect(master);o.start(t);o.stop(t+.2)}
+  if(M.kick&&s%2==1){const bs=ac.createBufferSource(),g=ac.createGain(),h=ac.createBiquadFilter();bs.buffer=nb;h.type='highpass';h.frequency.value=7000;g.gain.value=.12;bs.connect(h);h.connect(g);g.connect(master);bs.start(t)}}}
+
+// ---------- reproducción y grabación
+const VR={v:[720,1280],l:[540,960],s:[720,720],p:[720,900]},VID={url:'',blob:null};let busy=0,cancel=0;
+const pickMime=()=>['video/mp4;codecs=avc1.42E01E,mp4a.40.2','video/mp4;codecs=avc1','video/mp4','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].find(m=>window.MediaRecorder&&MediaRecorder.isTypeSupported(m))||'';
+const vel=o=>o.vel||(o.vel=new Promise(r=>{const v=document.createElement('video');v.muted=true;v.loop=true;v.playsInline=true;v.preload='auto';v.onloadeddata=()=>r(v);v.onerror=()=>r(null);v.src=o.vsrc;setTimeout(()=>r(null),8000)}));
+async function run(rec){
+ if(busy){cancel=1;return}
+ const sc=scenes();if(!sc.length)return vst('Escribí un guion, subí fotos o leé un link de YouTube primero.');
+ if(rec&&!window.MediaRecorder)return vst('Este navegador no puede grabar video. Probá con Chrome o Safari actualizados.');
+ busy=1;cancel=0;$('#vpv').textContent=$('#vrec').textContent='⏹ Detener';
+ let ac=null,mr=null,done=null,ch=[];
+ try{
+  const[W,H]=VR[$('#vr').value],dur=+$('#vd').value,total=sc.length*dur,cv=$('#vcv'),x=cv.getContext('2d'),snap=document.createElement('canvas'),sx=snap.getContext('2d');
+  cv.width=snap.width=W;cv.height=snap.height=H;
+  for(const s of sc)if(s.it&&s.it.vsrc){vst('Preparando clips…');s.v=await vel(s.it)}
+  sc.forEach((s,i)=>prep(s,i));
+  $('#vfxl').innerHTML='<b>Efectos elegidos:</b><br>'+sc.map((s,i)=>`${i+1} · ${esc(TOP[s.tp].n)}: ${s.fx.filter(f=>FXN[f]).map(f=>FXN[f]).join(', ')||'zoom suave'}`).join('<br>');
+  if(rec){const stream=cv.captureStream(30),cnt={};sc.forEach(s=>cnt[s.mood]=(cnt[s.mood]||0)+1);
+   if(isOn('mu')&&$('#vmu').checked){ac=new(window.AudioContext||window.webkitAudioContext)();await ac.resume();const d=ac.createMediaStreamDestination();music(ac,d,total,Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0]);d.stream.getAudioTracks().forEach(t=>stream.addTrack(t))}
+   const mime=pickMime();mr=new MediaRecorder(stream,mime?{mimeType:mime,videoBitsPerSecond:5e6}:{});mr.ondataavailable=e=>e.data&&e.data.size&&ch.push(e.data);done=new Promise(r=>mr.onstop=r)}
+  let last=-1;
+  const draw=T=>{const i=Math.min(sc.length-1,T/dur|0),ts=T-i*dur,s=sc[i];
+   if(i!=last){if(last>=0){sx.drawImage(cv,0,0);sc[last].v&&sc[last].v.pause()}if(s.v){s.v.currentTime=0;s.v.play().catch(()=>{})}last=i}
+   frame(x,W,H,s,ts,dur);
+   if(i>0&&ts<.3){x.globalAlpha=1-ts/.3;x.drawImage(snap,0,0);x.globalAlpha=1}else if(i==0&&ts<.4){x.fillStyle=`rgba(0,0,0,${1-ts/.4})`;x.fillRect(0,0,W,H)}
+   if(T>total-.45){x.fillStyle=`rgba(0,0,0,${clamp((T-total+.45)/.45,0,1)})`;x.fillRect(0,0,W,H)}
+   sig(x,W,H);$('#vbar i').style.width=Math.min(100,T/total*100)+'%'};
+  vst(rec?'⏺ Grabando… no cambies de pestaña ni apagues la pantalla.':'▶ Vista previa (sin sonido)…');
+  draw(0);if(mr)mr.start();
+  const t0=performance.now();
+  await new Promise(res=>{const f=()=>{const T=(performance.now()-t0)/1000;if(cancel){res();return}if(T>=total){draw(total-.001);res();return}draw(T);requestAnimationFrame(f)};f()});
+  sc.forEach(s=>s.v&&s.v.pause());
+  if(mr){if(mr.state!='inactive')mr.stop();await done}
+  if(rec&&!cancel&&ch.length){const type=(mr.mimeType||'video/webm').split(';')[0],blob=new Blob(ch,{type}),ext=/mp4/.test(type)?'mp4':'webm';
+   if(VID.url)URL.revokeObjectURL(VID.url);VID.url=URL.createObjectURL(blob);VID.blob=blob;
+   const vv=$('#vvid');vv.src=VID.url;vv.hidden=false;const a=$('#vdl');a.href=VID.url;a.download='video-corto.'+ext;a.hidden=false;$('#vsh').hidden=false;
+   vst(`Listo ✔ (${ext.toUpperCase()}, ${(blob.size/1e6).toFixed(1)} MB).`+(ext=='webm'?' Instagram y TikTok piden MP4: si no te deja subirlo, convertilo (por ej. con CapCut) o grabá desde un Chrome actualizado.':''))}
+  else vst(cancel?'Cancelado.':rec?'No se grabó nada. Probá de nuevo.':'Vista previa terminada. Si te gusta, tocá 🎬 Grabar video.')
+ }catch(e){vst('Error: '+(e.message||e))}
+ if(ac)ac.close().catch(()=>{});
+ busy=0;$('#vpv').textContent='▶ Vista previa';$('#vrec').textContent='🎬 Grabar video'}
+$('#vpv').onclick=()=>run(0);$('#vrec').onclick=()=>run(1);
+$('#vsh').onclick=async()=>{if(!VID.blob)return;const f=new File([VID.blob],$('#vdl').download,{type:VID.blob.type});if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],text:$('#cap').value}).catch(()=>{});else vst('Tu navegador no comparte archivos: usá Descargar y subilo a la red social.')};
+plugUI();
+window.IGV={ytId,fxFor,scenes,frame,prep,music,layout};
+})();
+</script></body></html>
